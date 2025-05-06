@@ -21,6 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-plhd1$#-0&$1b(v!o^wi!@*mzy=f_d^*5!z_p(*wdw3=nt7$u$'
+# TODO uncomment or remove below line when credit card storage is decided
+# ENCRYPTED_MODEL_FIELDS_KEY = b'0ufW2mmzulpO3TwWea_kN8-m1o6fWmHm1R_eFxowHGU='
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -75,8 +77,12 @@ WSGI_APPLICATION = 'CastleApartments.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'verklegt_namskeid_db',
+        'USER': 'verklegt_db_user',
+        'PASSWORD': 'pLJRc1SQeokfWXkVkLSksViB',
+        'HOST': 'db-verklegt-namskeid-ii-eu-qb12ct.postgres.database.azure.com',
+        'PORT': '5432'
     }
 }
 
