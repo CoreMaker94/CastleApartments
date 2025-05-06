@@ -5,16 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d4aa7ee-7075-42ba-8127-c0051bc90111" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/purchaseoffer/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/purchaseoffer/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/purchaseoffer/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/purchaseoffer/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/purchaseoffer/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/purchaseoffer/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/purchaseoffer/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/purchaseoffer/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CastleApartments/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/CastleApartments/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/purchaseoffer/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/purchaseoffer/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +26,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="branch" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
@@ -52,7 +51,7 @@
     "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "branch",
+    "git-widget-placeholder": "Korri",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -109,7 +108,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1746522135800</updated>
-      <workItem from="1746522136978" duration="15101000" />
+      <workItem from="1746522136978" duration="18466000" />
     </task>
     <servers />
   </component>
