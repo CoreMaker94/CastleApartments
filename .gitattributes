@@ -1,0 +1,44 @@
+# Auto normalize line endings across platforms
+* text=auto
+
+# Force LF for source code files
+*.py text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.sh text eol=lf
+*.toml text eol=lf
+*.ini text eol=lf
+
+# Force CRLF for Windows-only files (batch scripts)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files (no line-ending conversion)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.tar binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+
+# SQLite DB
+*.sqlite3 binary
+
+# Django migrations (optional: treat as text)
+*.py text eol=lf
+
+# PyCharm and IDE config files (if not ignored)
+*.xml text eol=lf
