@@ -1,10 +1,154 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+<div class="container">
+
+  <!-- Dropdown Filters -->
+  <div class="row">
+    <div class="col">
+      <select>
+        <option selected>Postal Code</option>
+        <option value="101">101</option>
+        <option value="102">102</option>
+        <option value="103">103</option>
+      </select>
+    </div>
+    <div class="col">
+      <select>
+        <option selected>Property Type</option>
+        <option value="apartment">Apartment</option>
+        <option value="house">House</option>
+      </select>
+    </div>
+    <div class="col">
+      <select>
+        <option selected>Price</option>
+        <option value="low">Low to High</option>
+        <option value="high">High to Low</option>
+      </select>
+    </div>
+    <div class="col">
+      <select>
+        <option selected>Order By</option>
+        <option value="latest">Latest</option>
+        <option value="oldest">Oldest</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="row">
+    <div class="col">
+      <input type="text" placeholder="Search for a property">
+    </div>
+  </div>
+
+  <!-- Property Grid -->
+  <!-- Row 1 -->
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <img src="{% static 'images/apt1.jpg' %}" alt="Apartment 1">
+      <div class="card-body">
+        <h5>Modern Apartment</h5>
+        <p>2 beds • 1 bath • 900 sqft</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <img src="{% static 'images/apt2.jpg' %}" alt="Apartment 2">
+      <div class="card-body">
+        <h5>Cozy Studio</h5>
+        <p>1 bed • 1 bath • 500 sqft</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <img src="{% static 'images/apt3.jpg' %}" alt="Apartment 3">
+      <div class="card-body">
+        <h5>Luxury Condo</h5>
+        <p>3 beds • 2 baths • 1200 sqft</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Row 2 -->
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <img src="{% static 'images/apt4.jpg' %}" alt="Apartment 4">
+      <div class="card-body">
+        <h5>City View Flat</h5>
+        <p>2 beds • 1 bath • 800 sqft</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <img src="{% static 'images/apt5.jpg' %}" alt="Apartment 5">
+      <div class="card-body">
+        <h5>Suburban Home</h5>
+        <p>4 beds • 3 baths • 1600 sqft</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <img src="{% static 'images/apt6.jpg' %}" alt="Apartment 6">
+      <div class="card-body">
+        <h5>Student Studio</h5>
+        <p>1 bed • 1 bath • 400 sqft</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Row 3 -->
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <img src="{% static 'images/apt7.jpg' %}" alt="Apartment 7">
+      <div class="card-body">
+        <h5>Garden View Apt</h5>
+        <p>2 beds • 2 baths • 1000 sqft</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <img src="{% static 'images/apt8.jpg' %}" alt="Apartment 8">
+      <div class="card-body">
+        <h5>Penthouse Suite</h5>
+        <p>3 beds • 3 baths • 1800 sqft</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card">
+      <img src="{% static 'images/apt9.jpg' %}" alt="Apartment 9">
+      <div class="card-body">
+        <h5>Minimalist Loft</h5>
+        <p>2 beds • 1 bath • 750 sqft</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Castle Apartments</p>
+  </footer>
+
+</div>
+{% endblock %}
