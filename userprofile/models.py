@@ -1,6 +1,6 @@
 from django.db import models
 
-from property.models import ZipCode
+from zipcode.models import ZipCode
 
 class Type(models.Model):
     name = models.CharField(max_length=50)
