@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+
+  <!-- Big Image -->
+  <div>
+    <img src="{% static 'images/featured_apartment.jpg' %}" class="property-image1" alt="Featured Apartment">
+  </div>
+
+  <!-- Popular Listings Title -->
+  <h3>Popular Listings</h3>
+
+  <!-- 3 Popular Listings -->
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <img src="{% static 'images/popular1.jpg' %}" class="card-img-top" alt="Popular Listing 1">
+        <div class="card-body">
+          <h5 class="card-title">Modern Apartment</h5>
+          <p class="card-text">2 beds • 1 bath • 900 sqft</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <img src="{% static 'images/popular2.jpg' %}" class="card-img-top" alt="Popular Listing 2">
+        <div class="card-body">
+          <h5 class="card-title">Cozy Studio</h5>
+          <p class="card-text">1 bed • 1 bath • 500 sqft</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <img src="{% static 'images/popular3.jpg' %}" class="card-img-top" alt="Popular Listing 3">
+        <div class="card-body">
+          <h5 class="card-title">Luxury Condo</h5>
+          <p class="card-text">3 beds • 2 baths • 1200 sqft</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p class="text-center">© 2025 Castle Apartments</p>
+  </footer>
+
+</div>
+{% endblock %}
+

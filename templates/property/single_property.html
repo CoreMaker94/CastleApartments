@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{ candy.name }}</h5>
+    {%  if is_detail == True %}
+        <p class="candy-text">{{ candy.description }}</p>
+        <a href="java.script:history.back()">Go Back</a>
+    {%  else %}
+        <a href="{% url "candy-by-id" id=candy.id %}" class="btn btn-primary">See more</a>
+    {%  endif %}
+  </div>
+</div>

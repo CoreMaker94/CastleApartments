@@ -8,5 +8,5 @@ def offer_list(request):
     return render(request, "purchaseoffer/purchaseoffers.html", {
         'offer': offer,
     })
-def finalized_offer_detail(request, offer_id):
+#def finalized_offer_detail(request, offer_id):
     # finsih this
