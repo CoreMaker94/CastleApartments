@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import UniqueConstraint, Q
+
 from userprofile.models import UserProfile
 from zipcode.models import ZipCode
 
@@ -20,3 +22,20 @@ class Property(models.Model):
     price = models.IntegerField()
     list_date = models.DateField()
 
+    def main_image(self):
+        return self.images.filter(is_main=True) or self.images.first()
+
+class PropertyImage(models.Model):
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='property_images', blank=True, null=True)
+    is_main = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [
+            #Ensures only one main image
+            UniqueConstraint(
+                fields=['property'],
+                condition=Q(is_main=True),
+                name='only_one_main_image_per_property'
+            )
+        ]
