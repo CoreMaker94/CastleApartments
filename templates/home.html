@@ -4,50 +4,38 @@
 {% block content %}
 <div class="container">
 
-  <!-- Big Image -->
-  <div>
-    <img src="{% static 'images/featured_apartment.jpg' %}" class="property-image1" alt="Featured Apartment">
-  </div>
+  <!-- Big Featured Property -->
+  {% if featured %}
+    <div class="mb-4">
+      {% if featured.propertyimage_set.first %}
+        <img src="{{ featured.propertyimage_set.first.image.url }}" class="img-fluid w-100" alt="Featured Property">
+      {% else %}
+        <img src="{% static 'images/default.jpg' %}" class="img-fluid w-100" alt="Default Featured Image">
+      {% endif %}
+    </div>
+  {% endif %}
 
-  <!-- Popular Listings Title -->
+  <!-- Popular Listings -->
   <h3>Popular Listings</h3>
-
-  <!-- 3 Popular Listings -->
   <div class="row">
-    <div class="col">
-      <div class="card">
-        <img src="{% static 'images/popular1.jpg' %}" class="card-img-top" alt="Popular Listing 1">
-        <div class="card-body">
-          <h5 class="card-title">Modern Apartment</h5>
-          <p class="card-text">2 beds • 1 bath • 900 sqft</p>
+    {% for property in popular %}
+      <div class="col-md-4">
+        <div class="card mb-4">
+          {% if property.propertyimage_set.first %}
+            <img src="{{ property.propertyimage_set.first.image.url }}" class="card-img-top" alt="Property Image">
+          {% else %}
+            <img src="{% static 'images/default.jpg' %}" class="card-img-top" alt="Default Image">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ property.address }}</h5>
+            <p class="card-text">{{ property.beds }} beds • {{ property.bath }} bath • {{ property.size }} sqft</p>
+            <p class="card-text"><strong>${{ property.price }}</strong></p>
+            <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary btn-sm">View Details</a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col">
-      <div class="card">
-        <img src="{% static 'images/popular2.jpg' %}" class="card-img-top" alt="Popular Listing 2">
-        <div class="card-body">
-          <h5 class="card-title">Cozy Studio</h5>
-          <p class="card-text">1 bed • 1 bath • 500 sqft</p>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card">
-        <img src="{% static 'images/popular3.jpg' %}" class="card-img-top" alt="Popular Listing 3">
-        <div class="card-body">
-          <h5 class="card-title">Luxury Condo</h5>
-          <p class="card-text">3 beds • 2 baths • 1200 sqft</p>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
   </div>
-
-  <!-- Footer -->
-  <footer>
-    <p class="text-center">© 2025 Castle Apartments</p>
-  </footer>
 
 </div>
 {% endblock %}
-

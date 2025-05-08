@@ -44,14 +44,13 @@
   <<div id="property-grid">
     {% for property in properties %}
       <div class="property-card">
-        <a href="{% url 'property_by_id' property.id %}">
-          <h3>{{ property.name }}</h3>
-          <p>{{ property.address }}</p>
-          <p>Zip Code: {{ property.zipcode }}</p>
-          <p>Type: {{ property.type.name }}</p>
-          <p>Price: ${{ property.price }}</p>
-        </a>
+        <h3>{{ property.name }}</h3>
+        <p>{{ property.address }}</p>
+        <p>Zip Code: {{ property.zipcode.code }}</p><p>Type: {{ property.type.name }}</p>
+        <p>Price: ${{ property.price }}</p>
+        <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary btn-sm">View Details</a>
       </div>
+
     {% endfor %}
   </div>
 
