@@ -20,3 +20,13 @@ class Property(models.Model):
     price = models.IntegerField()
     list_date = models.DateField()
 
+    def main_image(self):
+        return self.images.filter(is_main=True) or self.images.first()
+
+class PropertyImage(models.Model):
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='images')
+    is_main = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('property', 'is_main') # Ensure that only one image is the main image at a time.
+
