@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'userprofile.apps.UserprofileConfig',
     'purchaseoffer.apps.PurchaseofferConfig',
     'zipcode.apps.ZipcodeConfig',
+    'user.apps.UserConfig',
 ]
 
 MIDDLEWARE = [
