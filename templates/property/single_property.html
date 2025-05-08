@@ -1,11 +1,72 @@
-<div class="card" style="width: 18rem;">
-  <div class="card-body">
-    <h5 class="card-title">{{ candy.name }}</h5>
-    {%  if is_detail == True %}
-        <p class="candy-text">{{ candy.description }}</p>
-        <a href="java.script:history.back()">Go Back</a>
-    {%  else %}
-        <a href="{% url "candy-by-id" id=candy.id %}" class="btn btn-primary">See more</a>
-    {%  endif %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row">
+    <!-- Property Image -->
+    <div class="col-md-6">
+      {% if property.propertyimage_set.all %}
+        <img src="{{ property.propertyimage_set.first.image.url }}" class="img-fluid rounded" alt="Property Image">
+      {% else %}
+        <img src="{% static 'images/no-image.png' %}" class="img-fluid rounded" alt="No Image Available">
+      {% endif %}
+    </div>
+
+    <!-- Property Details -->
+    <div class="col-md-6">
+      <h2>{{ property.address }}</h2>
+      <p><strong>Type:</strong> {{ property.type.name }}</p>
+      <p><strong>Location:</strong> {{ property.zipcode }}</p>
+      <p><strong>Price:</strong> {{ property.price }} ISK</p>
+      <p><strong>Listing Date:</strong> {{ property.list_date }}</p>
+      <p><strong>Bedrooms:</strong> {{ property.beds }}</p>
+      <p><strong>Bathrooms:</strong> {{ property.bath }}</p>
+      <p><strong>Size:</strong> {{ property.size }} m²</p>
+
+      <!-- Seller Info -->
+      <div class="seller-info mt-4 d-flex align-items-center">
+        {% if property.seller.profile_image %}
+          <img src="{{ property.seller.profile_image.url }}" class="rounded-circle me-3 seller-img" alt="Seller Image">
+        {% endif %}
+        <div>
+          <p><strong>Seller:</strong> {{ property.seller }}</p>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+
+  <!-- Description -->
+  <div class="mt-5">
+    <h4>Description</h4>
+    <p>{{ property.description }}</p>
+  </div>
+
+  <!-- Other Properties -->
+  <div class="mt-5">
+    <h4>Other Properties for Sale</h4>
+    <div class="row">
+      {% for p in other_properties %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            {% if p.propertyimage_set.first %}
+              <img src="{{ p.propertyimage_set.first.image.url }}" class="card-img-top" alt="...">
+            {% endif %}<div class="card-body">
+              <h5 class="card-title">{{ p.address }}</h5>
+              <p class="card-text">{{ p.price }} ISK</p>
+              <a href="{% url 'property_by_id' p.id %}" class="btn btn-sm btn-primary">View</a>
+                </div>
+          </div>
+        </div>
+      {% endfor %}
+        </div>
+    </div>
+  </div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="container">
+    <p>&copy; 2025 DogAdvisor.com. All rights reserved.</p>
+  </div>
+</footer>
+{% endblock %}

@@ -3,152 +3,58 @@
 
 {% block content %}
 <div class="container">
+  <form id="filter-form" method="get">
+    <!-- Zip Code Dropdown -->
+    <select name="zipcode">
+      <option value="">Zip Code</option>
+      {% for zip in zipcodes %}
+        <option value="{{ zip }}" {% if zip == request.GET.zipcode %}selected{% endif %}>
+          {{ zip }}
+        </option>
+      {% endfor %}
+    </select>
 
-  <!-- Dropdown Filters -->
-  <div class="row">
-    <div class="col">
-      <select>
-        <option selected>Postal Code</option>
-        <option value="101">101</option>
-        <option value="102">102</option>
-        <option value="103">103</option>
-      </select>
-    </div>
-    <div class="col">
-      <select>
-        <option selected>Property Type</option>
-        <option value="apartment">Apartment</option>
-        <option value="house">House</option>
-      </select>
-    </div>
-    <div class="col">
-      <select>
-        <option selected>Price</option>
-        <option value="low">Low to High</option>
-        <option value="high">High to Low</option>
-      </select>
-    </div>
-    <div class="col">
-      <select>
-        <option selected>Order By</option>
-        <option value="latest">Latest</option>
-        <option value="oldest">Oldest</option>
-      </select>
-    </div>
-  </div>
+    <!-- Property Type Dropdown -->
+    <select name="property_type">
+      <option value="">Property Type</option>
+      {% for type in property_types %}
+        <option value="{{ type }}" {% if type == request.GET.property_type %}selected{% endif %}>
+          {{ type }}
+        </option>
+      {% endfor %}
+    </select>
 
-  <!-- Search Bar -->
-  <div class="row">
-    <div class="col">
-      <input type="text" placeholder="Search for a property">
-    </div>
-  </div>
+    <!-- Price Order Dropdown -->
+    <select name="price_order">
+      <option value="">Price</option>
+      <option value="low" {% if request.GET.price_order == 'low' %}selected{% endif %}>Low to High</option>
+      <option value="high" {% if request.GET.price_order == 'high' %}selected{% endif %}>High to Low</option>
+    </select>
 
-  <!-- Property Grid -->
-  <!-- Row 1 -->
-<div class="row">
-  <div class="col">
-    <div class="card">
-      <img src="{% static 'images/apt1.jpg' %}" alt="Apartment 1">
-      <div class="card-body">
-        <h5>Modern Apartment</h5>
-        <p>2 beds • 1 bath • 900 sqft</p>
+    <!-- Search Input -->
+    <div class="input-group mb-3 mt-3">
+      <span class="input-group-text" id="search-icon">🔍</span>
+      <input type="search" id="search-value"  class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="search-icon" />
+    </div>
+
+
+  </form>
+
+  <!-- Property Grid: where results will be displayed -->
+  <<div id="property-grid">
+    {% for property in properties %}
+      <div class="property-card">
+        <a href="{% url 'property_by_id' property.id %}">
+          <h3>{{ property.name }}</h3>
+          <p>{{ property.address }}</p>
+          <p>Zip Code: {{ property.zipcode }}</p>
+          <p>Type: {{ property.type.name }}</p>
+          <p>Price: ${{ property.price }}</p>
+        </a>
       </div>
-    </div>
+    {% endfor %}
   </div>
 
-  <div class="col">
-    <div class="card">
-      <img src="{% static 'images/apt2.jpg' %}" alt="Apartment 2">
-      <div class="card-body">
-        <h5>Cozy Studio</h5>
-        <p>1 bed • 1 bath • 500 sqft</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="col">
-    <div class="card">
-      <img src="{% static 'images/apt3.jpg' %}" alt="Apartment 3">
-      <div class="card-body">
-        <h5>Luxury Condo</h5>
-        <p>3 beds • 2 baths • 1200 sqft</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Row 2 -->
-<div class="row">
-  <div class="col">
-    <div class="card">
-      <img src="{% static 'images/apt4.jpg' %}" alt="Apartment 4">
-      <div class="card-body">
-        <h5>City View Flat</h5>
-        <p>2 beds • 1 bath • 800 sqft</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="col">
-    <div class="card">
-      <img src="{% static 'images/apt5.jpg' %}" alt="Apartment 5">
-      <div class="card-body">
-        <h5>Suburban Home</h5>
-        <p>4 beds • 3 baths • 1600 sqft</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="col">
-    <div class="card">
-      <img src="{% static 'images/apt6.jpg' %}" alt="Apartment 6">
-      <div class="card-body">
-        <h5>Student Studio</h5>
-        <p>1 bed • 1 bath • 400 sqft</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Row 3 -->
-<div class="row">
-  <div class="col">
-    <div class="card">
-      <img src="{% static 'images/apt7.jpg' %}" alt="Apartment 7">
-      <div class="card-body">
-        <h5>Garden View Apt</h5>
-        <p>2 beds • 2 baths • 1000 sqft</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="col">
-    <div class="card">
-      <img src="{% static 'images/apt8.jpg' %}" alt="Apartment 8">
-      <div class="card-body">
-        <h5>Penthouse Suite</h5>
-        <p>3 beds • 3 baths • 1800 sqft</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="col">
-    <div class="card">
-      <img src="{% static 'images/apt9.jpg' %}" alt="Apartment 9">
-      <div class="card-body">
-        <h5>Minimalist Loft</h5>
-        <p>2 beds • 1 bath • 750 sqft</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 Castle Apartments</p>
-  </footer>
-
-</div>
+<!-- Link to JS file -->
+<script src="{% static 'js/property_filter.js' %}"></script>
 {% endblock %}
