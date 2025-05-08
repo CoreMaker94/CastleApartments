@@ -63,3 +63,61 @@
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
 }
+#search-icon:hover {
+  background-color: #dcdcdc;
+}
+#search-icon {
+  border: 1px solid #ccc;
+}
+
+.brand-stacked {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-size: 1.8rem; /* Adjust as needed */
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.brand-line {
+  display: block;
+}
+.brand-stacked {
+  margin-right: 2rem; /* spacing between brand and links */
+  color: #004080; /* example: dark blue text */
+}
+body {
+  background-color: #e6f7ff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+main {
+  flex: 1;
+}
+
+
+footer {
+  width: 100%;
+  background-color: transparent;
+  padding: 2rem 0;
+}
+
+.footer-box {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+
+
