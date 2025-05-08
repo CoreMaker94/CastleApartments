@@ -27,7 +27,13 @@ def property_list(request):
 
 # view home
 def home(request):
-    return render(request, 'home.html')
+    recent = Property.objects.order_by('-list_date')[:4]
+    return render(request, 'home.html', {
+        "featured": recent[0] if recent else None,
+        "popular": recent[1:] if len(recent) > 1 else []
+    })
+
+
 # View to display a single property by its ID
 def property_by_id(request, id):
     property = Property.objects.get(id=id)
