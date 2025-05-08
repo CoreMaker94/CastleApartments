@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <!-- Profile Header with Name -->
-    <h2>{{ user.name }}</h2>
+    <h2> {{ profile.name }}</h2>
 
     <div class="row">
         <!-- Profile Picture -->
@@ -17,62 +17,34 @@
         <div class="col-8">
             <h4>Profile Details</h4>
             <ul>
-                <li><strong>Name:</strong> {{ user.name }}</li>
-                <li><strong>Address:</strong> {{ user.address }}</li>
-                <li><strong>Phone:</strong> {{ user.phone }}</li>
-                <li><strong>Kennitala:</strong> {{ user.kennitala }}</li>
+                <li><strong>Name:</strong> {{ profile.name }}</li>
+                {% if profile.type_id != 1 %} {# If the profile is not a buyer #}
+                    <li><strong>Type</strong> {{ profile.type.name }}</li>
+                    <li><strong>SSN:</strong> {{ profile.ssn }}</li>
+                {% endif %}
+                {% if profile.type == 3 %} {# Check if agency #}
+                    <li><strong>Address:</strong> {{ user.address }}</li>
+                {% endif %}
+
+
             </ul>
             <button class="btn btn-secondary">Edit Profile</button>
         </div>
     </div>
+    {# If profile is a buyer #}
+    {% if profile.type_id == 1 %}
+        <!-- Purchase Offer section-->
+        {% include "purchaseoffer/purchaseoffers.html"%}
 
-    <!-- Purchase Offers Section -->
-    <div class="mt-5">
-        <h4>Purchase Offers</h4>
-
-        <!-- Offer 1 -->
-        <div class="card mt-3">
-            <div class="card-body">
-                <h5>Offer 1</h5>
-                <p><strong>Address:</strong> 123 Main St, Reykjavik</p>
-                <p><strong>Offer Amount:</strong> $250,000</p>
-                <p><strong>Seller:</strong> John Doe</p>
-                <p><strong>Expiry Date:</strong> 2025-06-01</p>
-                <p><strong>Offer Date:</strong> 2025-05-01</p>
-                <p><strong>Status:</strong> <span class="badge badge-warning">Pending</span></p>
-                <button class="btn btn-success">Accept</button>
-                <button class="btn btn-primary">Finalize</button>
-            </div>
-        </div>
-
-        <!-- Offer 2 -->
-        <div class="card mt-3">
-            <div class="card-body">
-                <h5>Offer 2</h5>
-                <p><strong>Address:</strong> 456 Park Ave, Reykjavik</p>
-                <p><strong>Offer Amount:</strong> $280,000</p>
-                <p><strong>Seller:</strong> Alice Smith</p>
-                <p><strong>Expiry Date:</strong> 2025-06-15</p>
-                <p><strong>Offer Date:</strong> 2025-04-20</p>
-                <p><strong>Status:</strong> <span class="badge badge-danger">Rejected</span></p>
-            </div>
-        </div>
-
-        <!-- Offer 3 -->
-        <div class="card mt-3">
-            <div class="card-body">
-                <h5>Offer 3</h5>
-                <p><strong>Address:</strong> 789 Oak Blvd, Reykjavik</p>
-                <p><strong>Offer Amount:</strong> $300,000</p>
-                <p><strong>Seller:</strong> Bob Johnson</p>
-                <p><strong>Expiry Date:</strong> 2025-07-01</p>
-                <p><strong>Offer Date:</strong> 2025-05-05</p>
-                <p><strong>Status:</strong> <span class="badge badge-warning">Pending</span></p>
-                <button class="btn btn-success">Accept</button>
-                <button class="btn btn-primary">Finalize</button>
-            </div>
-        </div>
-    </div>
-
-</div>
+    {# If profile is a seller #}
+    {% else %}
+        <!-- Property section-->
+        {% for property in properties %}
+            {# {% include "property/single_property.html" with is_detail=False %} #} {# TODO uncomment this when single_property is fixed #}
+        {% endfor %}
+    {% endif %}
 {% endblock %}
+
+
+
+

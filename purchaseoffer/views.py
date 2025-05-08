@@ -4,7 +4,7 @@ from purchaseoffer.models import Offer
 
 # Create your views here.
 def offer_list(request):
-    offer = offers.objects.all()
+    offer = Offer.objects.all()
     return render(request, "purchaseoffer/purchaseoffers.html", {
         'offer': offer,
     })
