@@ -15,7 +15,8 @@ def property_list(request):
                     'price': x.price,
                     'type': x.type.name,
                     # TODO: image
-                    # 'image', x.propertyimage_set_first().image if x.propertyimage_set.exists() else None,
+
+                    #'image', x.propertyimage_set_first().image if x.propertyimage_set.exists() else None,
                     'zipcode': x.zipcode.code,
                 } for x in Property.objects.filter(address__icontains=request.GET['search_filter']).order_by('address')
             ]

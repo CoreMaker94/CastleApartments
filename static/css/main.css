@@ -1,45 +1,24 @@
-/* styles.css */
-.banner {
-    position: relative;
-    display: flex;
-    height: 100px;
-    overflow: hidden;
-    top: 0;
-    left: 0;
+/* SOCIAL ICONS */
+.icon {
+  width: 15px;
+  height: 15px;
+  margin-right: 10px; /* space between icons */
+  object-fit: contain;
 }
 
-.logo img {
-    position: absolute;
-    height: 100%;
-    width: auto;
-    object-fit: contain;
-    background-color: white;
-    padding: 5px;
-    top: 0;
-    left: 0;
-    z-index: 2;
+.social-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem; /* space below "Castle Apartments" */
 }
 
-.banner-image{
-    width: 100%;
-}
 
-.banner-image img {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    top: 0;
-    left: 0;
-    z-index: 1;
-}
-/* Container spacing */
+/* SEARCH FIELD */
 .input-group {
   max-width: 500px;
   margin: 1rem auto;
 }
 
-/* Search icon styling */
 #search-icon {
   background-color: #e9ecef;
   border: 1px solid #ced4da;
@@ -52,9 +31,13 @@
   min-width: 45px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
+  cursor: pointer;
 }
 
-/* Search input field styling */
+#search-icon:hover {
+  background-color: #dcdcdc;
+}
+
 #search-value {
   border: 1px solid #ced4da;
   border-left: none;
@@ -63,61 +46,84 @@
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
 }
-#search-icon:hover {
-  background-color: #dcdcdc;
-}
-#search-icon {
-  border: 1px solid #ccc;
-}
+
 
 .brand-stacked {
   display: flex;
   flex-direction: column;
   text-align: center;
-  font-size: 1.8rem; /* Adjust as needed */
+  font-size: 1.8rem;
   font-weight: bold;
   line-height: 1.2;
+  margin-right: 2rem;
+  color: black !important;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
+
+.brand-stacked:hover {
+  color: #0056b3 !important;
+  transform: scale(1.05);
+}
+
 
 .brand-line {
   display: block;
 }
-.brand-stacked {
-  margin-right: 2rem; /* spacing between brand and links */
-  color: #004080; /* example: dark blue text */
-}
-body {
+
+/* PAGE LAYOUT */
+html, body {
+  height: 100%;
+  margin: 0;
   background-color: #e6f7ff;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  margin: 0;
 }
 
 main {
   flex: 1;
 }
-
-
-footer {
-  width: 100%;
-  background-color: transparent;
-  padding: 2rem 0;
+.custom-header {
+  background-color: #e6f7ff; /* soft light blue */
+  border: 1px solid black;
+  padding: 0.5rem
 }
 
-.footer-box {
-  background-color: white;
+.custom-header .nav-link,
+.custom-header .navbar-brand {
+  color: #004080;
+}
+
+.custom-header .nav-link:hover {
+  color: #002244;
+}
+.custom-footer {
+    background-color: white;
+    padding: 0.1rem;
+    border-top: 1px solid black;
+}
+.card-body p {
+  margin-bottom: 0.5rem;
+}
+.featured-image {
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-}
-.icon {
-  width: 24px;
-  height: 24px;
+  max-height: 300px;
+  object-fit: cover;
 }
 
+.spacer {
+  height: 50px; /* or whatever space you need */
+}
+.nav-link {
+  color: #333; /* default color */
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.nav-link:hover {
+  color: black;
+  transform: scale(1.05);
+  text-decoration: underline;
+}
+.card {
+  margin: 10px;
+}
 
 
