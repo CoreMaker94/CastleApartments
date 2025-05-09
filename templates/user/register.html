@@ -2,12 +2,13 @@
 
 {% block content %}
     <div class="container">
-    <h1>Register now!</h1>
+        <h1>Register now!</h1>
 
-    <form method="post" action="{% url 'register' %}"></form>
+        <form method="post" action="{% url 'register' %}">
 
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" class="btn btn-primary" value="register"/>
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" class="btn btn-primary" value="Register"/>
+        </form>
     </div>
 {% endblock %}

@@ -119,5 +119,6 @@ footer {
   height: 24px;
 }
 
-
-
+#updateProfileForm{
+    display: none !important;
+}

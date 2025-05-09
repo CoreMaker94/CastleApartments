@@ -1,31 +1,61 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
+from django.core.exceptions import ObjectDoesNotExist
+from purchaseoffer.models import Offer
+from property.models import Property
+from user.forms.profile_form import BuyerProfileForm, SellerProfileForm
+from user.models import Profile
+
 
 def register(request):
     if request.method == "POST":
         form = UserCreationForm(request.POST)
-        #TODO decide what to if form is not valid
+        #TODO give error message when registration fails
         if form.is_valid():
             form.save()
             return redirect('login')
+        else:
+            return redirect('home')
 
     else:
         return render(request, "user/register.html", {
             'form': UserCreationForm(),
         })
 
-#own profile view
+# Own profile view
 def profile(request):
+    # Get their profile or create an empty one if they lack a profile
+    user_profile, created = Profile.objects.get_or_create(user=request.user)
+    print(created)
+    # For updating a profile
+    if request.method == "POST":
+        if user_profile.type.id == 1:
+            form = BuyerProfileForm(request.POST, instance=user_profile)
+        else:
+            form = SellerProfileForm(request.POST, instance=user_profile)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
+            return redirect('profile')
+
+    # Sending the form for get request
+    if user_profile.type.id == 1:
+        form = BuyerProfileForm(instance=user_profile)
+    else:
+        form = SellerProfileForm(instance=user_profile)
     return render(request, 'user/profile.html', {
-        'profile': profile,
+        'form' : form,
+        'profile' : user_profile,
     })
 
-##### TODO Fix this shit
+# TODO Fix visit view
+# TODO "should" not allow viewing buyers, unless difficult to implement
 # User visitation view
 def get_profile_by_id(request, id):
-    profile = UserProfile.objects.get(id=id)
+    profile = UserProfile.objects.get(id=id) # TODO fix this
     # If buyer
-    if profile.type_id == 1:
+    if profile.type_id == 1: # TODO check if this still works after changes
         purchaseoffers = Offer.objects.filter(buyer_id=id)
         return render(request, 'profile/profile.html', {
             'profile': profile,

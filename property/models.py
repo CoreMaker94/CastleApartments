@@ -1,7 +1,6 @@
 from django.db import models
 from django.db.models import UniqueConstraint, Q
 
-from userprofile.models import UserProfile
 from zipcode.models import ZipCode
 
 # Create your models here.
