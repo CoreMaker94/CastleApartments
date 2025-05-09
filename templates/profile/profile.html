@@ -1,79 +1,15 @@
+{# OLD should be removed soon but keeping up while rebuilding everything #}
+
 {% extends "base.html" %}
-{% load static %}
+
 {% block content %}
-    {# TODO: Make this 2-3 different html files for buyer/seller #}
     <div class="container">
-    {# Handles Banner/logo images for non buyers #}
-    {% if profile.type_id != 1 %}
-        <!-- banner.html -->
-        <div class="banner">
-        {# Check if the user has logo #}
-            {% if profile.logo %}
-                <div class="logo">
-                    <img src="{{ profile.logo.url }}" alt="Logo image">
-                </div>
-            {% endif %}
+    <h1>Profile2</h1>
 
-            {% if profile.banner %}
-                <div class="banner-image">
-                    <img src="{{ profile.banner.url }}" alt="Default Banner image">
-                </div>
-            {% else %}
-                <div class="banner-image">
-                    <img src="{% static 'images/default_banner.jpg' %}" alt="Banner image">
-                </div>
-            {% endif %}
-        </div>
-    {% endif %}
-        <!-- Profile Header with Name -->
-        <h2> {{ profile.name }}</h2>
-
-        <div class="row">
-            <!-- Profile Picture -->
-            <div class="col-4 text-center">
-                {% if profile.image %}
-                    <img src="{{ profile.image.url }}" class="rounded-circle" alt="Profile Picture" style="width: 150px; height: 150px;">
-
-                {% else %}
-                    <img src="{% static 'images/default_profile.jpg' %}" class="rounded-circle" alt="Profile Picture" style="width: 150px; height: 150px;">
-                 {% endif %}
-            <br><br>
-                <button class="btn btn-primary">Edit Profile Picture</button>
-            </div>
-
-            <!-- Profile Details -->
-            <div class="col-8">
-                <h4>Profile Details</h4>
-                <ul>
-                    <li><strong>Name:</strong> {{ profile.name }}</li>
-                    {% if profile.type_id != 1 %} {# If the profile is not a buyer #}
-                        <li><strong>Type</strong> {{ profile.type.name }}</li>
-                        <li><strong>SSN:</strong> {{ profile.ssn }}</li>
-                    {% endif %}
-                    {% if profile.type == 3 %} {# Check if agency #}
-                        <li><strong>Address:</strong> {{ user.address }}</li>
-                    {% endif %}
-
-
-                </ul>
-                <button class="btn btn-secondary">Edit Profile</button>
-            </div>
-        </div>
-        {# If profile is a buyer #}
-        {% if profile.type_id == 1 %}
-            <!-- Purchase Offer section-->
-            {% include "purchaseoffer/purchaseoffers.html"%}
-
-        {# If profile is a seller #}
-        {% else %}
-            <!-- Property section-->
-            {% for property in properties %}
-                {# {% include "property/single_property.html" with is_detail=False %} #} {# TODO uncomment this when single_property is fixed #}
-            {% endfor %}
-        {% endif %}
+    <form method="post" action="{% url 'profile' %}">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" class="btn btn-primary" value="Update"/>
+    </form>
     </div>
 {% endblock %}
-
-
-
-

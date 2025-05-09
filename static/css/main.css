@@ -110,6 +110,11 @@ main {
   object-fit: cover;
 }
 
+
+#updateProfileForm{
+    display: none !important;
+}
+
 .spacer {
   height: 50px; /* or whatever space you need */
 }
@@ -125,5 +130,4 @@ main {
 .card {
   margin: 10px;
 }
-
 

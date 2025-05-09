@@ -9,7 +9,6 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('userprofile', '0001_initial'),
         ('zipcode', '0001_initial'),
     ]
 

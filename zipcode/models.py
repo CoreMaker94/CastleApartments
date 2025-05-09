@@ -11,3 +11,6 @@ class ZipCode(models.Model):
     code = models.CharField(max_length=10, unique=True)
     area = models.ForeignKey(Area, on_delete=models.CASCADE)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.code} - {self.city.name}"

@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'property.apps.PropertyConfig',
-    'userprofile.apps.UserprofileConfig',
     'purchaseoffer.apps.PurchaseofferConfig',
     'zipcode.apps.ZipcodeConfig',
+    'user.apps.UserConfig',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +138,6 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = '/user/profile' # TODO this should redirect to YOUR profile
+LOGOUT_REDIRECT_URL = '/'
