@@ -2,34 +2,44 @@
 {% load static %}
 
 {% block content %}
-<div class="container">
-  <form id="filter-form" method="get">
-    <!-- Zip Code Dropdown -->
-    <select name="zipcode">
-      <option value="">Zip Code</option>
-      {% for zip in zipcodes %}
-        <option value="{{ zip }}" {% if zip == request.GET.zipcode %}selected{% endif %}>
-          {{ zip }}
-        </option>
-      {% endfor %}
-    </select>
+    <div class="container mt-3">
+      <form id="filter-form" method="get">
+        <div class="row justify-content-center mb-4 text-center">
+          <!-- Zip Code Dropdown -->
+          <div class="col-md-3 mb-2">
+            <select name="zipcode" class="form-select">
+              <option value="">Zip Code</option>
+              {% for zip in zipcodes %}
+                <option value="{{ zip }}" {% if zip == request.GET.zipcode %}selected{% endif %}>
+                  {{ zip }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
 
-    <!-- Property Type Dropdown -->
-    <select name="property_type">
-      <option value="">Property Type</option>
-      {% for type in property_types %}
-        <option value="{{ type }}" {% if type == request.GET.property_type %}selected{% endif %}>
-          {{ type }}
-        </option>
-      {% endfor %}
-    </select>
+          <!-- Property Type Dropdown -->
+          <div class="col-md-3 mb-2">
+            <select name="property_type" class="form-select">
+              <option value="">Property Type</option>
+              {% for type in property_types %}
+                <option value="{{ type }}" {% if type == request.GET.property_type %}selected{% endif %}>
+                  {{ type }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
 
-    <!-- Price Order Dropdown -->
-    <select name="price_order">
-      <option value="">Price</option>
-      <option value="low" {% if request.GET.price_order == 'low' %}selected{% endif %}>Low to High</option>
-      <option value="high" {% if request.GET.price_order == 'high' %}selected{% endif %}>High to Low</option>
-    </select>
+          <!-- Price Order Dropdown -->
+          <div class="col-md-3 mb-2">
+            <select name="price_order" class="form-select">
+              <option value="">Price</option>
+              <option value="low" {% if request.GET.price_order == 'low' %}selected{% endif %}>Low to High</option>
+              <option value="high" {% if request.GET.price_order == 'high' %}selected{% endif %}>High to Low</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
 
     <!-- Search Input -->
     <div class="input-group mb-3 mt-3">
@@ -41,18 +51,26 @@
   </form>
 
   <!-- Property Grid: where results will be displayed -->
-  <<div id="property-grid">
+   <div class="row" id="property-grid">
     {% for property in properties %}
-      <div class="property-card">
-        <h3>{{ property.name }}</h3>
-        <p>{{ property.address }}</p>
-        <p>Zip Code: {{ property.zipcode.code }}</p><p>Type: {{ property.type.name }}</p>
-        <p>Price: ${{ property.price }}</p>
-        <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary btn-sm">View Details</a>
-      </div>
+       <div class="col-md-4 mb-4">
+         <div class="card h-100 shadow-sm">
+           {% if property.propertyimage_set.first %}
+             <img src="{{ property.propertyimage_set.first.image.url }}" class="card-img-top" alt="Property Image">
+           {% else %}
+             <img src="/media/property_images/House1.jpg" class="card-img-top" alt="House 1">
+           {%endif %}
+           <div class="card-body">
+             <h5 class="card-title">{{ property.address }}</h5>
+             <p class="card-text">{{ property.beds }} 🛏️ • {{ property.bath }} 🛁 • {{ property.size }} 📐</p>
+             <p class="card-text"><strong>${{ property.price }}</strong></p>
+             <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary btn-sm">View Details</a>
+           </div>
+         </div>
+       </div>
+     {% endfor %}
+   </div>
 
-    {% endfor %}
-  </div>
 
 <!-- Link to JS file -->
 <script src="{% static 'js/property_filter.js' %}"></script>

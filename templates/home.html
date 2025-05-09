@@ -2,16 +2,25 @@
 {% load static %}
 
 {% block content %}
-<div class="container">
-
+<div class="container mt-3">
   <!-- Big Featured Property -->
   {% if featured %}
-    <div class="mb-4">
-      {% if featured.propertyimage_set.first %}
-        <img src="{{ featured.propertyimage_set.first.image.url }}" class="img-fluid w-100" alt="Featured Property">
-      {% else %}
-        <img src="{% static 'images/default.jpg' %}" class="img-fluid w-100" alt="Default Featured Image">
-      {% endif %}
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-7.5">
+        <div class="card border-0">
+          {% if featured.propertyimage_set.first %}
+            <img src="{{ featured.propertyimage_set.first.image.url }}" class="img-fluid featured-image rounded-top" alt="Featured Property">
+          {% else %}
+            <img src="{% static 'images/featured_apartment.jpg' %}" class="img-fluid featured-image rounded-top" alt="Default Featured Image">
+          {% endif %}
+          <div class="card-body">
+            <h4 class="card-title">{{ featured.address }}</h4>
+            <p class="card-text">{{ featured.beds }} 🛏️ • {{ featured.bath }} 🛁 • {{ featured.size }} 📐</p>
+            <p class="card-text"><strong>${{ featured.price }}</strong></p>
+            <a href="{% url 'property_by_id' featured.id %}" class="btn btn-primary btn-sm">View Details</a>
+          </div>
+        </div>
+      </div>
     </div>
   {% endif %}
 
@@ -24,11 +33,11 @@
           {% if property.propertyimage_set.first %}
             <img src="{{ property.propertyimage_set.first.image.url }}" class="card-img-top" alt="Property Image">
           {% else %}
-            <img src="{% static 'images/default.jpg' %}" class="card-img-top" alt="Default Image">
+            <img src="{% static 'images/featured_apartment.jpg' %}" class="card-img-top" alt="Default Image">
           {% endif %}
           <div class="card-body">
             <h5 class="card-title">{{ property.address }}</h5>
-            <p class="card-text">{{ property.beds }} beds • {{ property.bath }} bath • {{ property.size }} sqft</p>
+            <p class="card-text">{{ property.beds }} 🛏️ • {{ property.bath }} 🛁 • {{ property.size }}  📐</p>
             <p class="card-text"><strong>${{ property.price }}</strong></p>
             <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary btn-sm">View Details</a>
           </div>
