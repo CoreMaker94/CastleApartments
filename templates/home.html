@@ -8,10 +8,10 @@
     <div class="row justify-content-center mb-4">
       <div class="col-lg-7.5">
         <div class="card border-0">
-          {% if featured.propertyimage_set.first %}
-            <img src="{{ featured.propertyimage_set.first.image.url }}" class="img-fluid featured-image rounded-top" alt="Featured Property">
+          {% if property.images.first %}
+            <img src="{{ property.images.first.image.url }}" class="img-fluid featured-image rounded-top" alt="Featured Property">
           {% else %}
-            <img src="{% static 'images/featured_apartment.jpg' %}" class="img-fluid featured-image rounded-top" alt="Default Featured Image">
+            <img src="{% static 'images/no-image.png' %}" class="img-fluid featured-image rounded-top" alt="Default Featured Image">
           {% endif %}
           <div class="card-body">
             <h4 class="card-title">{{ featured.address }}</h4>
@@ -30,10 +30,10 @@
     {% for property in popular %}
       <div class="col-md-4">
         <div class="card mb-4">
-          {% if property.propertyimage_set.first %}
-            <img src="{{ property.propertyimage_set.first.image.url }}" class="card-img-top" alt="Property Image">
+          {% if property.images.first %}
+            <img src="{{ property.images.first.image.url }}" class="card-img-top" alt="Property Image">
           {% else %}
-            <img src="{% static 'images/featured_apartment.jpg' %}" class="card-img-top" alt="Default Image">
+            <img src="{% static 'images/no-image.png' %}" class="card-img-top" alt="Default Image">
           {% endif %}
           <div class="card-body">
             <h5 class="card-title">{{ property.address }}</h5>

@@ -58,7 +58,7 @@
            {% if property.images.first %}
              <img src="{{ property.images.first.image.url }}" class="card-img-top" alt="Property Image">
            {% else %}
-             <img src="{% static 'images/default.jp' %} class="card-img-top" alt="House 1">
+             <img src="{% static 'images/default.jp' %}" class="card-img-top" alt="House 1">
            {% endif %}
            <div class="card-body">
              <h5 class="card-title">{{ property.address }}</h5>

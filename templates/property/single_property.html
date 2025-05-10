@@ -6,8 +6,8 @@
   <div class="row">
     <!-- Property Image -->
     <div class="col-md-6">
-      {% if property.propertyimage_set.all %}
-        <img src="{{ property.propertyimage_set.first.image.url }}" class="img-fluid rounded" alt="Property Image">
+      {% if property.images.first %}
+        <img src="{{ property.images.first.image.url }}" class="img-fluid rounded" alt="Property Image">
       {% else %}
         <img src="{% static 'images/no-image.png' %}" class="img-fluid rounded" alt="No Image Available">
       {% endif %}
@@ -49,8 +49,8 @@
       {% for p in other_properties %}
         <div class="col-md-4 mb-4">
           <div class="card">
-            {% if p.propertyimage_set.first %}
-              <img src="{{ p.propertyimage_set.first.image.url }}" class="card-img-top" alt="...">
+            {% if property.images.first %}
+              <img src="{{ property.images.first.image.url }}" class="card-img-top" alt="...">
             {% endif %}<div class="card-body">
               <h5 class="card-title">{{ p.address }}</h5>
               <p class="card-text">{{ p.price }} ISK</p>
@@ -63,10 +63,4 @@
     </div>
   </div>
 
-<!-- Footer -->
-<footer class="site-footer">
-  <div class="container">
-    <p>&copy; 2025 DogAdvisor.com. All rights reserved.</p>
-  </div>
-</footer>
 {% endblock %}
