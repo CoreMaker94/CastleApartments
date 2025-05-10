@@ -4,7 +4,7 @@
     <div class="container">
         <h1>{{ profile.name }}</h1>
         {# Hidden profile form #}
-        <form method="post" style="display: none" id="updateProfileForm" action="{% url 'profile' %}">
+        <form method="post" action="{% url 'profile' %}">
             {% csrf_token %}
             {{ form }}
             <input type="submit" class="btn btn-primary" value="Update"/>

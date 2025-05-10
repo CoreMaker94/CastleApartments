@@ -4,62 +4,62 @@
 {% block content %}
     <div class="container mt-3">
       <form id="filter-form" method="get">
-        <div class="row justify-content-center mb-4 text-center">
-          <!-- Zip Code Dropdown -->
-          <div class="col-md-3 mb-2">
-            <select name="zipcode" class="form-select">
-              <option value="">Zip Code</option>
-              {% for zip in zipcodes %}
-                <option value="{{ zip }}" {% if zip == request.GET.zipcode %}selected{% endif %}>
-                  {{ zip }}
-                </option>
-              {% endfor %}
-            </select>
-          </div>
+            <div class="row justify-content-center mb-4 text-center">
+              <!-- Zip Code Dropdown -->
+              <div class="col-md-3 mb-2">
+                <select id="zipcode-filter" name="zipcode" class="form-select">
+                  <option value="">Zip Code</option>
+                  {% for zip in zipcodes %}
+                    <option value="{{ zip }}" {% if zip == request.GET.zipcode %}selected{% endif %}>
+                      {{ zip }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
 
-          <!-- Property Type Dropdown -->
-          <div class="col-md-3 mb-2">
-            <select name="property_type" class="form-select">
-              <option value="">Property Type</option>
-              {% for type in property_types %}
-                <option value="{{ type }}" {% if type == request.GET.property_type %}selected{% endif %}>
-                  {{ type }}
-                </option>
-              {% endfor %}
-            </select>
-          </div>
+              <!-- Property Type Dropdown -->
+              <div class="col-md-3 mb-2">
+                <select id="type-filter" name="property_type" class="form-select">
+                  <option value="">Property Type</option>
+                  {% for type in property_types %}
+                    <option value="{{ type }}" {% if type == request.GET.property_type %}selected{% endif %}>
+                      {{ type }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
 
-          <!-- Price Order Dropdown -->
-          <div class="col-md-3 mb-2">
-            <select name="price_order" class="form-select">
-              <option value="">Price</option>
-              <option value="low" {% if request.GET.price_order == 'low' %}selected{% endif %}>Low to High</option>
-              <option value="high" {% if request.GET.price_order == 'high' %}selected{% endif %}>High to Low</option>
-            </select>
-          </div>
+              <!-- Price Order Dropdown -->
+              <div class="col-md-3 mb-2">
+                <select id="price-filter" name="price_order" class="form-select">
+                  <option value="">Price</option>
+                  <option value="low" {% if request.GET.price_order == 'low' %}selected{% endif %}>Low to High</option>
+                  <option value="high" {% if request.GET.price_order == 'high' %}selected{% endif %}>High to Low</option>
+                </select>
+              </div>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
 
     <!-- Search Input -->
-    <div class="input-group mb-3 mt-3">
-      <span class="input-group-text" id="search-icon">🔍</span>
-      <input type="search" id="search-value"  class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="search-icon" />
-    </div>
+        <div class="input-group mb-3 mt-3">
+          <span class="input-group-text" id="search-icon">🔍</span>
+          <input type="search" id="search-value"  class="form-control" placeholder="Search..." aria-label="Search" aria-describedby="search-icon" />
+        </div>
 
 
-  </form>
+      </form>
 
   <!-- Property Grid: where results will be displayed -->
    <div class="row" id="property-grid">
     {% for property in properties %}
        <div class="col-md-4 mb-4">
          <div class="card h-100 shadow-sm">
-           {% if property.propertyimage_set.first %}
-             <img src="{{ property.propertyimage_set.first.image.url }}" class="card-img-top" alt="Property Image">
+           {% if property.images.first %}
+             <img src="{{ property.images.first.image.url }}" class="card-img-top" alt="Property Image">
            {% else %}
-             <img src="/media/property_images/House1.jpg" class="card-img-top" alt="House 1">
-           {%endif %}
+             <img src="{% static 'images/default.jp' %} class="card-img-top" alt="House 1">
+           {% endif %}
            <div class="card-body">
              <h5 class="card-title">{{ property.address }}</h5>
              <p class="card-text">{{ property.beds }} 🛏️ • {{ property.bath }} 🛁 • {{ property.size }} 📐</p>
