@@ -1,0 +1,29 @@
+.profile-banner-wrapper {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.profile-banner {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.profile-logo {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: white;
+    padding: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-logo img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}

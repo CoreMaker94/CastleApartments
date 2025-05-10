@@ -20,8 +20,9 @@ class Profile(models.Model):
     address = models.CharField(max_length=50, blank=True, null=True)
     image = models.ImageField(upload_to='profile_images', blank=True, null=True)
     banner = models.ImageField(upload_to='profile_banners', blank=True, null=True)
-    logo = models.ImageField(upload_to='profile_logo', blank=True, null=True)
+    logo = models.ImageField(upload_to='profile_logos', blank=True, null=True)
     phone = PhoneNumberField(region='IS', null=True)
+    bio = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.name} {self.type.name}"

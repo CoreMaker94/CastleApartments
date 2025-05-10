@@ -1,0 +1,19 @@
+{% load static %}
+
+<!-- _banner.html -->
+<div class="profile-banner-wrapper">
+
+    {# Banner background (either user's banner or default) #}
+    <div class="profile-banner" style="
+        background-image: url('{% if profile.banner %}{{ profile.banner.url }}{% else %}{% static 'images/default_banner.jpg' %}{% endif %}');
+    ">
+    </div>
+
+    {# Overlaid logo if present #}
+    {% if profile.logo %}
+        <div class="profile-logo">
+            <img src="{{ profile.logo.url }}" alt="Logo image">
+        </div>
+    {% endif %}
+
+</div>
