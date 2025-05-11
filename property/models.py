@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import UniqueConstraint, Q
 
@@ -9,7 +10,7 @@ class Type(models.Model):
     name = models.CharField(max_length=50)
 
 class Property(models.Model):
-    seller_id = models.IntegerField(default=1)
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="seller")
     type = models.ForeignKey(Type, on_delete=models.CASCADE)
     zipcode = models.ForeignKey(ZipCode, on_delete=models.CASCADE)
     address = models.CharField(max_length=50) # Probably 50 is enough for max_length
@@ -22,7 +23,7 @@ class Property(models.Model):
     list_date = models.DateField()
 
     def main_image(self):
-        return self.images.filter(is_main=True) or self.images.first()
+        return self.images.filter(is_main=True).first() or self.images.first()
 
 class PropertyImage(models.Model):
     property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='images')

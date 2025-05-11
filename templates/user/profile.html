@@ -27,10 +27,11 @@
             {% endif %}
         </div>
         {# Hidden profile form #}
-        <form method="post" enctype="multipart/form-data" action="{% url 'profile' %}">
+        <form id="edit-profile-form" style="display: none" method="post" enctype="multipart/form-data" action="{% url 'profile' %}">
             {% csrf_token %}
             {{ form }}
             <input type="submit" class="btn btn-primary" value="Update"/>
         </form>
+        <button id="toggle-edit-profile-button" onclick="displayEditSellerProfileButtonForm()" value="Submit a purchase offer"></button>
     </div>
 {% endblock %}

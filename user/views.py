@@ -54,7 +54,7 @@ def profile(request):
 # TODO "should" not allow viewing buyers, unless difficult to implement
 # User visitation view
 def get_profile_by_id(request, id):
-    profile = UserProfile.objects.get(id=id) # TODO fix this
+    profile = Profile.objects.get(user_id=id) # TODO fix this, maybe has to be id=id
     # If buyer
     if profile.type_id == 1: # TODO check if this still works after changes
         purchaseoffers = Offer.objects.filter(buyer_id=id)

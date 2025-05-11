@@ -1,9 +1,12 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from property.models import Property
+from purchaseoffer.forms.purchase_offer_form import PurchaseOfferForm
 from zipcode.models import ZipCode
 from property.models import Type
 from django.db.models import Q
+from purchaseoffer.models import Offer
+from purchaseoffer.forms import purchase_offer_form
 
 
 def property_list(request):
@@ -67,10 +70,15 @@ def home(request):
 
 # View to display a single property by its ID
 def property_by_id(request, id):
+    offer = None
+    if request.user.is_authenticated:
+        offer = Offer.objects.filter(property_id=id, buyer_id = request.user.id).first()
     property = Property.objects.get(id=id)
     other_properties = Property.objects.exclude(id=id)[:6]
+    form = PurchaseOfferForm(instance=offer)
     return render(request, "property/single_property.html", {
         "property": property,
         "other_properties": other_properties,
-
+        "offer": offer,
+        "form" : form,
     })

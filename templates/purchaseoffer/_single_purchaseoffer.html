@@ -1,10 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% load static %}
+
+<div class="single-offer">
+    <div class="offer-left">
+        {% if offer.property.main_image %} {#  #}
+            <img src="{{ offer.property.main_image.url }}" alt="Main property image">
+        {% else %}
+            <img src="{% static 'images/featured_apartment.jpg' %}" alt="No image available">
+        {% endif %}
+        {{ offer.property.address }}
+        {{ offer.offer }}
+        {{ offer.seller.name }}
+    </div>
+    <div class="offer-left">
+        {{ offer.created_at }}
+        {{ offer.expires_at }}
+        {{ offer.status }}
+    </div>
+</div>
