@@ -3,10 +3,35 @@ from django.shortcuts import render
 from property.models import Property
 from zipcode.models import ZipCode
 from property.models import Type
+from django.db.models import Q
 
 
 def property_list(request):
     if 'search_filter' in request.GET:
+        properties = Property.objects.all()
+
+        # Address search
+        search_query = request.GET.get('search_filter', '').strip()
+        if search_query:
+            properties = properties.filter(address__icontains=search_query)
+
+        # Zip code filter
+        zipcode = request.GET.get('zipcode')
+        if zipcode:
+            properties = properties.filter(zipcode__code=zipcode)
+
+        # Property type filter
+        property_type = request.GET.get('property_type')
+        if property_type:
+            properties = properties.filter(type__name=property_type)
+
+        # Price sorting
+        price_order = request.GET.get('price_order')
+        if price_order == 'low':
+            properties = properties.order_by('price')
+        elif price_order == 'high':
+            properties = properties.order_by('-price')
+
         return JsonResponse({
             'data': [
                 {
@@ -14,16 +39,21 @@ def property_list(request):
                     'address': x.address,
                     'price': x.price,
                     'type': x.type.name,
-                    # TODO: image
-
-                    #'image', x.propertyimage_set_first().image if x.propertyimage_set.exists() else None,
                     'zipcode': x.zipcode.code,
-                } for x in Property.objects.filter(address__icontains=request.GET['search_filter']).order_by('address')
+                    'image': x.images.first().image.url if x.images.first() else ""
+                } for x in properties
             ]
         })
+
+    # For page load
     properties = Property.objects.all()
+    zipcodes = Property.objects.values_list('zipcode__code', flat=True).distinct()
+    property_types = Property.objects.select_related('type').values_list('type__name', flat=True).distinct()
+
     return render(request, "property/properties.html", {
         "properties": properties,
+        "zipcodes": zipcodes,
+        "property_types": property_types,
     })
 
 # view home

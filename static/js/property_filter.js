@@ -3,30 +3,41 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchButton = document.getElementById("search-icon");
 
     searchButton.addEventListener("click", async function () {
-      const searchValueElement = document.getElementById("search-value");
+      const search = document.getElementById("search-value").value.trim();
+      const zipcode = document.getElementById("zipcode-filter")?.value || "";
+      const propertyType = document.getElementById("type-filter")?.value || "";
+      const priceOrder = document.getElementById("price-filter")?.value || "";
       const propertiesPlaceholder = document.getElementById("property-grid");
-      const value = searchValueElement.value.trim();
+
+
+      const query = new URLSearchParams({
+        search_filter: search,
+        zipcode: zipcode,
+        property_type: propertyType,
+        price_order: priceOrder,
+      });
 
       try {
-        const response = await fetch(`?search_filter=${encodeURIComponent(value)}`);
+        const response = await fetch(`?${query.toString()}`);
+
         if (response.ok) {
           const json = await response.json();
           const properties = json.data;
 
           const html = properties
-            .map(
-              (property) => `
-                <div class="property-card">
-                  <h3>${property.address}</h3>
-                  <p>Zip Code: ${property.zipcode.code || property.zipcode}</p>
-                  <p>Type: ${property.type.name || property.type}</p>
-                  <p>Price: $${property.price}</p>
-                  <img src="${property.image}" alt="Property Image" style="max-width: 100%; height: auto;" />
-                  <a href="/property/${property.id}" class="btn btn-primary btn-sm">View Details</a>
+            .map((property) => `
+              <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                  <img src="${property.image}" class="card-img-top" alt="Property Image">
+                  <div class="card-body">
+                    <h5 class="card-title">${property.address}</h5>
+                    <p class="card-text">${property.beds} 🛏️ • ${property.bath} 🛁 • ${property.size} 📐</p>
+                    <p class="card-text"><strong>$${property.price}</strong></p>
+                    <a href="/property/${property.id}" class="btn btn-primary btn-sm">View Details</a>
+                  </div>
                 </div>
-              `
-            )
-            .join("");
+              </div>
+            `).join("");
 
           propertiesPlaceholder.innerHTML = html;
         } else {
