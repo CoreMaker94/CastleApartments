@@ -111,10 +111,6 @@ main {
 }
 
 
-#updateProfileForm{
-    display: none !important;
-}
-
 .spacer {
   height: 50px; /* or whatever space you need */
 }
@@ -131,3 +127,7 @@ main {
   margin: 10px;
 }
 
+.rounded-circle .avatar{
+  width: 150px;
+  height: 150px;
+}

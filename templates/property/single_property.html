@@ -33,6 +33,13 @@
           <p><strong>Seller:</strong> {{ property.seller }}</p>
         </div>
       </div>
+    {% if user.is_authenticated %}
+        <form action="{% url 'make-offer' property.id %}" method="post">
+        {% csrf_token %}
+            {{ form }}
+            <button class="btn btn-primary" >Submit a purchase offer</button>
+        </form>
+    {% endif %}
     </div>
   </div>
 
@@ -49,8 +56,10 @@
       {% for p in other_properties %}
         <div class="col-md-4 mb-4">
           <div class="card">
-            {% if property.images.first %}
-              <img src="{{ property.images.first.image.url }}" class="card-img-top" alt="...">
+            {% if p.images.first %}
+              <img src="{{ p.images.first.image.url }}" class="card-img-top" alt="...">
+            {% else %}
+              <img src="{% static 'images/featured_apartment.jpg' %}" class="card-img-top" alt="...">
             {% endif %}<div class="card-body">
               <h5 class="card-title">{{ p.address }}</h5>
               <p class="card-text">{{ p.price }} ISK</p>

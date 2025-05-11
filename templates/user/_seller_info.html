@@ -1,0 +1,26 @@
+
+{{ profile.name }}
+<div class="col-8">
+    <script>
+        function displayEditSellerProfileButtonForm() {
+            const form = document.getElementById("edit-profile-form");
+            const profileList = document.getElementById("profile-list");
+            const editProfileButton = document.getElementById("toggle-edit-profile-button");
+            const isViewing = form.style.display === "none";
+            form.style.display = isViewing ? "block" : "none";
+            profileList.style.display = isViewing ? "none" : "block";
+            editProfileButton.innerHTML = isViewing ? "Cancel Edit" : "Edit Profile";
+        }
+    </script>
+    <h4>Profile Details</h4>
+    <ul id="profile-list">
+        <li><strong>Name: </strong>{{ profile.name }}</li>
+        <li><strong>Type: </strong>{{ profile.type.name }}</li>
+        {% if profile.type_id == 3 %} {# Check if agency #}
+            <li><strong>Address: </strong>{{ profile.address }}</li>
+            <li><strong>City: </strong>{{ profile.zipcode.city.name }}</li>
+            <li><strong>Zip: </strong>{{ profile.zipcode.code }}</li>
+        {% endif %}
+        <li><strong>Biography: </strong>{{ profile.bio }}</li>
+    </ul>
+</div>

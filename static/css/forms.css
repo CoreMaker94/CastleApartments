@@ -1,0 +1,7 @@
+.my-custom-class{
+    display: inline-grid;
+}
+
+#updateProfileForm{
+    display: none !important;
+}
