@@ -1,9 +1,11 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.db.models import OuterRef, Subquery
+from django.db.models.functions import Coalesce
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from purchaseoffer.models import Offer
-from property.models import Property
+from property.models import Property, PropertyImage
 from user.forms.profile_form import BuyerProfileForm, SellerProfileForm, CustomUserCreationForm
 from user.models import Profile
 from django.contrib import messages
@@ -64,9 +66,6 @@ def profile(request):
         'profile': user_profile,
     })
 
-# TODO Fix visit view
-# TODO "should" not allow viewing buyers, unless difficult to implement
-# User visitation view
 def get_profile_by_id(request, id):
     profile = (
         Profile.objects
@@ -83,8 +82,23 @@ def get_profile_by_id(request, id):
         # Another user trying to access Buyer profile that is not theirs
         raise Http404
 
-    properties = Property.objects.filter(seller_id=id).select_related('zipcode', 'seller')
+    main_image_subquery = PropertyImage.objects.filter(
+        property=OuterRef('pk'),
+        is_main=True
+    ).values('image')[:1]
 
+    # Fallback: any image
+    fallback_image_subquery = PropertyImage.objects.filter(
+        property=OuterRef('pk')
+    ).values('image')[:1]
+
+    # Annotated queryset with fallback logic
+    properties = Property.objects.filter(seller_id=id).annotate(
+        main_image=Coalesce(
+            Subquery(main_image_subquery),
+            Subquery(fallback_image_subquery)
+        )
+    ).values('id', 'address', 'main_image')
     return render(request, 'user/profile.html', {
         'profile': profile,
         'properties': properties

@@ -74,8 +74,10 @@ def get_offers(request):
 
     if profile.type.name == "Buyer":
         offers = Offer.objects.filter(buyer=user)
+        is_buyer = True
     else:
         offers = Offer.objects.filter(property__seller=user)
+        is_buyer = False
 
     # Expire all pending offers
     expired_pending_offers = offers.filter(status__name="Pending", expires_at__lte=date.today())
@@ -95,9 +97,16 @@ def get_offers(request):
                 "address": offer.property.address
             },
             "seller": {
-                "name": offer.property.seller.profile.name
+                "name": offer.property.seller.profile.name,
+                "id" : offer.property.seller.id
             },
             "finalize_url": f"/offers/{offer.id}/finalize/" # TODO fix this url
         })
 
-    return render(request, 'purchaseoffer/purchaseoffers.html', {"offers": offers_data})
+    return render(request, 'purchaseoffer/purchaseoffers.html', {
+        "offers": offers_data,
+        "is_buyer": is_buyer
+    })
+
+def change_status_seller(request, id):
+    offer = get_object_or_404(Offer, id=id)

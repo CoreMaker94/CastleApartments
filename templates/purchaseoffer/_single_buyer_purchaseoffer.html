@@ -1,0 +1,18 @@
+{% load static %}
+
+<div class="single-offer">
+    <div class="offer-left">
+        {{ offer.property.address }}
+        {{ offer.offer }}
+        {{ offer.seller.name }}
+    </div>
+    <div class="offer-left">
+        {{ offer.created_at }}
+        {{ offer.expires_at }}
+        {{ offer.status }}
+    {% if offer.seller.id == request.user %}
+        {% if offer.status == "Contingent" or offer.status == "Pending" %}
+            <button>Finalize</button>
+        {% endif %}
+    </div>
+</div>

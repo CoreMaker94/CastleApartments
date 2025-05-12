@@ -1,5 +1,3 @@
-{% load static %}
-
 <div class="single-offer">
     <div class="offer-left">
         {{ offer.property.address }}
@@ -10,8 +8,10 @@
         {{ offer.created_at }}
         {{ offer.expires_at }}
         {{ offer.status }}
-        {% if offer.status == "Contingent" or offer.status == "Pending" %}
-            <button>Finalize</button>
+        {% if offer.status == "Pending" %}
+            <button>Accept</button>
+            <button>Reject</button>
+            <button>Contingent</button>
         {% endif %}
     </div>
 </div>

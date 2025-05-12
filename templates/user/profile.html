@@ -43,17 +43,25 @@
       {% endif %}
 
       <!-- Hidden Profile Form -->
-      {% if request.user == profile.user %}{# Don't want to render this when others are checking the page #}
+      {% if request.user == profile.user %} {# Don't want to render this when others are checking the page #}
         <form id="edit-profile-form" style="display: none" method="post" enctype="multipart/form-data" action="{% url 'profile' %}">
           {% csrf_token %}
           {{ form }}
           <input type="submit" class="btn btn-primary mt-3" value="Update"/>
         </form>
 
-      <button id="toggle-edit-profile-button" onclick="displayEditSellerProfileButtonForm()" class="btn btn-secondary mt-3">
+      <button id="toggle-edit-profile-button" onclick="displayEditProfileButtonForm()" class="btn btn-secondary mt-3">
         Edit Profile
       </button>
       {% endif %}
+
+    {% if properties %} {# For visitor view #}
+        {% for property in properties %}
+            {{ property.address }}
+            {{ property.main_image }}
+            {{ property.id }}
+        {% endfor %}
+    {% endif %}
     </div>
   </div>
 </div>
