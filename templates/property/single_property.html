@@ -17,11 +17,13 @@
   <div class="row">
     <!-- Property Image -->
     <div class="col-md-6">
-      {% if property.images.first %}
-        <img src="{{ property.images.first.image.url }}" class="img-fluid rounded" alt="Property Image">
+    {% with property.main_image as main_img %}
+      {% if main_img %}
+        <img src="{{ main_img.image.url }}" class="img-fluid rounded" alt="Property Image">
       {% else %}
-        <img src="{% static 'images/no-image.png' %}" class="img-fluid rounded" alt="No Image Available">
+        <img src="{% static 'images/featured_apartment.jpg' %}" class="img-fluid rounded" alt="No Image Available">
       {% endif %}
+    {% endwith %}
     </div>
 
     <!-- Property Details -->
@@ -63,21 +65,8 @@
   <!-- Other Properties -->
   <div class="mt-5">
     <h4>Other Properties for Sale</h4>
-    <div class="row">
       {% for p in other_properties %}
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            {% if p.images.first %}
-              <img src="{{ p.images.first.image.url }}" class="card-img-top" alt="...">
-            {% else %}
-              <img src="{% static 'images/featured_apartment.jpg' %}" class="card-img-top" alt="...">
-            {% endif %}<div class="card-body">
-              <h5 class="card-title">{{ p.address }}</h5>
-              <p class="card-text">{{ p.price }} ISK</p>
-              <a href="{% url 'property_by_id' p.id %}" class="btn btn-sm btn-primary">View</a>
-                </div>
-          </div>
-        </div>
+          {% include "property/_available_properties.html" with property=p %}
       {% endfor %}
         </div>
     </div>

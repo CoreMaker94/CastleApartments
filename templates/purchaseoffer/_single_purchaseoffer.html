@@ -2,11 +2,6 @@
 
 <div class="single-offer">
     <div class="offer-left">
-        {% if offer.property.main_image %} {#  #}
-            <img src="{{ offer.property.main_image.url }}" alt="Main property image">
-        {% else %}
-            <img src="{% static 'images/featured_apartment.jpg' %}" alt="No image available">
-        {% endif %}
         {{ offer.property.address }}
         {{ offer.offer }}
         {{ offer.seller.name }}
@@ -15,5 +10,8 @@
         {{ offer.created_at }}
         {{ offer.expires_at }}
         {{ offer.status }}
+        {% if offer.status == "Contingent" or offer.status == "Pending" %}
+            <button>Finalize</button>
+        {% endif %}
     </div>
 </div>
