@@ -6,12 +6,10 @@
     {% if profile.type_id != 1 %}
         {% include 'user/_banner.html' with profile=profile%}
     {% endif %}
-        <!-- Profile Header with Name -->
-        <h2> {{ profile.name }}</h2>
-
         <div class="row-1">
-            <!-- Profile Picture -->
+            <!-- Profile Picture and name header -->
             <div class="col-4 text-center">
+            <h2> {{ profile.name }}</h2>
                 {% if profile.image %}
                     <img src="{{ profile.image.url }}" class="rounded-circle avatar" alt="Profile Picture">
                 {% else %}
@@ -32,6 +30,6 @@
             {{ form }}
             <input type="submit" class="btn btn-primary" value="Update"/>
         </form>
-        <button id="toggle-edit-profile-button" onclick="displayEditSellerProfileButtonForm()" value="Submit a purchase offer"></button>
+        <button id="toggle-edit-profile-button" class="btn btn-primary" onclick="displayEditSellerProfileButtonForm()" value="Submit a purchase offer"></button>
     </div>
 {% endblock %}

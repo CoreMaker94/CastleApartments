@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% load static %}
+{% with property.main_image as main_img %}
+    {% if main_img %}
+        <img src="{{ main_img.image.url }}" class="card-img-top" alt="Property Image">
+    {% else %}
+        <img src="{% static 'images/featured_apartment.jpg' %}" class="card-img-top" alt="Default Property">
+    {% endif %}
+{% endwith %}
+<div class="card-body">
+    <h5 class="card-title">{{ property.address }}</h5>
+    <p class="card-text">{{ property.beds }} 🛏️ • {{ property.bath }} 🛁 • {{ property.size }} 📐</p>
+    <p class="card-text"><strong>${{ property.price }}</strong></p>
+    <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary btn-sm">View Details</a>
+</div>

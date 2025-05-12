@@ -1,12 +1,15 @@
 from datetime import date
 
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.shortcuts import HttpResponse, get_object_or_404, redirect
 from django.shortcuts import render
 from property.models import Property
 
 from purchaseoffer.forms.purchase_offer_form import PurchaseOfferForm
-from purchaseoffer.models import Offer
+from purchaseoffer.models import Offer, Status
+from user.models import Profile
+
 
 # Create your views here.
 @login_required
@@ -16,6 +19,8 @@ def make_offer(request, id):
         form = PurchaseOfferForm(request.POST)
         prop = get_object_or_404(Property, id=id)
         buyer = request.user
+
+        # Check user type is not a seller (sellers can't buy)
 
         # Verify that buyer != seller
         if prop.seller.id == buyer.id:
@@ -50,3 +55,43 @@ def make_offer(request, id):
 
     prop = get_object_or_404(Property, id=id)
     return render(request, "property/single_property.html", {"form": form, "property": prop})
+
+@login_required
+def get_offers(request):
+    user = request.user
+    try:
+        profile = Profile.objects.get(user=user)
+    except Profile.DoesNotExist:
+        return JsonResponse({"error": "Profile not found"}, status=404)
+
+    rejected_status = Status.objects.get(name="Rejected")
+
+    if profile.type.name == "Buyer":
+        offers = Offer.objects.filter(buyer=user)
+    else:
+        offers = Offer.objects.filter(property__seller=user)
+
+    # Expire all pending offers
+    expired_pending_offers = offers.filter(status__name="Pending", expires_at__lte=date.today())
+    expired_pending_offers.update(status=rejected_status)
+
+    offers_data = []
+
+    for offer in offers.select_related("property", "status", "property__seller__profile"):
+        offers_data.append({
+            "id": offer.id,
+            "price": offer.offer,
+            "status": offer.status.name,
+            "created_at": offer.created_at,
+            "expires_at": offer.expires_at,
+            "property": {
+                "id": offer.property.id,
+                "address": offer.property.address
+            },
+            "seller": {
+                "name": offer.property.seller.profile.name
+            },
+            "finalize_url": f"/offers/{offer.id}/finalize/" # TODO fix this url
+        })
+
+    return render(request, 'purchaseoffer/purchaseoffers.html', {"offers": offers_data})

@@ -24,9 +24,9 @@ def register(request):
             'form': CustomUserCreationForm(),
         })
 
-# Own profile view
+# Own profile view, with offers
 def profile(request):
-    # Get their profile or create an empty one if they lack a profile
+    # Get their profile information
     user_profile = Profile.objects.get(user=request.user)
     # For updating a profile
     if request.method == "POST":

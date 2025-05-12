@@ -29,7 +29,6 @@ class Offer(models.Model):
         return f"{self.property.address} {self.buyer} {self.offer}"
 
 class Finalize(models.Model):
-    # If using encrypted field remember to uncomment ENCRYPTED_MODEL_FIELDS_KEY in settings.py
     offer = ForeignKey(Offer, on_delete=models.PROTECT)
     buyer_address = models.CharField(max_length=50)
     buyer_zipcode = models.CharField(max_length=20) # probably shouldn't reference zipcode table

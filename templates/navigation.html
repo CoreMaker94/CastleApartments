@@ -18,7 +18,9 @@
         </li>
           {% if user.is_authenticated %}
             <li class="nav-item">
-                {# TODO add it linking to the correct profile, maybe have a picture instead of just button #}
+              <a class="nav-link" href="{% url 'get-offers' %}">Your offers</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'profile' %}">Profile</a>
             </li>
             <li class="nav-item">

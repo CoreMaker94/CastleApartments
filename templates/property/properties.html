@@ -55,17 +55,7 @@
     {% for property in properties %}
        <div class="col-md-4 mb-4">
          <div class="card h-100 shadow-sm">
-           {% if property.images.first %}
-             <img src="{{ property.images.first.image.url }}" class="card-img-top" alt="Property Image">
-           {% else %}
-             <img src="{% static 'images/default.jp' %}" class="card-img-top" alt="House 1">
-           {% endif %}
-           <div class="card-body">
-             <h5 class="card-title">{{ property.address }}</h5>
-             <p class="card-text">{{ property.beds }} 🛏️ • {{ property.bath }} 🛁 • {{ property.size }} 📐</p>
-             <p class="card-text"><strong>${{ property.price }}</strong></p>
-             <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary btn-sm">View Details</a>
-           </div>
+            {% include "property/_available_properties.html" with property=property%}
          </div>
        </div>
      {% endfor %}
