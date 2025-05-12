@@ -2,22 +2,24 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-4">
+ <div class="container mt-4">
 
   {% if messages %}
     <div class="mt-3">
+      
       {% for message in messages %}
         <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
           {{ message }}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
       {% endfor %}
+      
     </div>
   {% endif %}
 
-  {% if profile.type_id != 1 %}
-    {% include 'user/_banner.html' with profile=profile %}
-  {% endif %}
+    {% if profile.type_id != 1 %}
+        {% include 'user/_banner.html' with profile=profile%}
+    {% endif %}
 
   <!-- Profile Header with Name -->
   <h2 class="mt-4">{{ profile.name }}</h2>
@@ -41,15 +43,17 @@
       {% endif %}
 
       <!-- Hidden Profile Form -->
-      <form id="edit-profile-form" style="display: none" method="post" enctype="multipart/form-data" action="{% url 'profile' %}">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" class="btn btn-primary mt-3" value="Update"/>
-      </form>
+      {% if request.user == profile.user %}{# Don't want to render this when others are checking the page #}
+        <form id="edit-profile-form" style="display: none" method="post" enctype="multipart/form-data" action="{% url 'profile' %}">
+          {% csrf_token %}
+          {{ form }}
+          <input type="submit" class="btn btn-primary mt-3" value="Update"/>
+        </form>
 
       <button id="toggle-edit-profile-button" onclick="displayEditSellerProfileButtonForm()" class="btn btn-secondary mt-3">
         Edit Profile
       </button>
+      {% endif %}
     </div>
   </div>
 </div>

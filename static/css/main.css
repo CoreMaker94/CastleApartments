@@ -1,8 +1,7 @@
 /* SOCIAL ICONS */
 .icon {
-  width: 15px;
-  height: 15px;
-  margin-right: 10px; /* space between icons */
+  width: 24px;
+  height: 24px;
   object-fit: contain;
 }
 
@@ -52,8 +51,8 @@
   display: flex;
   flex-direction: column;
   text-align: center;
-  font-size: 1.8rem;
-  font-weight: bold;
+  font-family: "Jacques Francois", serif;
+  font-size: 3rem;
   line-height: 1.2;
   margin-right: 2rem;
   color: black !important;
@@ -65,7 +64,6 @@
   transform: scale(1.05);
 }
 
-
 .brand-line {
   display: block;
 }
@@ -74,7 +72,7 @@
 html, body {
   height: 100%;
   margin: 0;
-  background-color: #e6f7ff;
+  background: linear-gradient(to bottom, #60A6D8, #D5EEFF);
   display: flex;
   flex-direction: column;
 }
@@ -82,15 +80,17 @@ html, body {
 main {
   flex: 1;
 }
+
 .custom-header {
-  background-color: #e6f7ff; /* soft light blue */
-  border: 1px solid black;
-  padding: 0.5rem
+  border-bottom: 1px solid black;
+  padding: 0.5rem;
+  width: 95%;
+  margin: 0 auto;
 }
 
 .custom-header .nav-link,
 .custom-header .navbar-brand {
-  color: #004080;
+  color: black;
 }
 
 .custom-header .nav-link:hover {

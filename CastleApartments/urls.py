@@ -25,5 +25,6 @@ urlpatterns = [
     path('',include('property.urls')),
     path('', TemplateView.as_view(template_name="home.html"), name='home'),
     path('user/', include('user.urls')),
+    path('offer', include('purchaseoffer.urls'))
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

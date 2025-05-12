@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <a class="navbar-brand brand-stacked" href="{% url 'home' %}">
       <span class="brand-line">Castle</span>
-      <span class="brand-line">Apartments</span>
+      <span class="brand-line" style="margin-left:50%">Apartments</span>
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -18,7 +18,9 @@
         </li>
           {% if user.is_authenticated %}
             <li class="nav-item">
-                {# TODO add it linking to the correct profile, maybe have a picture instead of just button #}
+              <a class="nav-link" href="{% url 'get-offers' %}">Your offers</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'profile' %}">Profile</a>
             </li>
             <li class="nav-item">
