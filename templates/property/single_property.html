@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container mt-5 mb-5">
-   {% if messages %}
+  {% if messages %}
     <div class="mt-3">
       {% for message in messages %}
         <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
@@ -38,19 +38,25 @@
       <!-- Seller Info -->
       <div class="seller-info mt-4 d-flex align-items-center">
         {% if property.seller.profile_image %}
-          <img src="{{ property.seller.profile_image.url }}" class="rounded-circle me-3 seller-img" alt="Seller Image">
+          <img src="{{ property.seller.profile_image.url }}" class="rounded-circle me-3 seller-img" alt="Seller Image" style="width: 60px; height: 60px;">
         {% endif %}
-        <div>
-          <p><strong>Seller:</strong> {{ property.seller }}</p>
-        </div>
+          <div>
+              <p><strong>Seller:</strong> {{ property.seller.profile.name }}</p>
+              <a href="{% url 'profile-by-id' property.seller.id %}" class="btn btn-outline-primary btn-sm">View
+                 Seller Info</a>
+          </div>
       </div>
-    {% if user.is_authenticated %}
-        <form action="{% url 'make-offer' property.id %}" method="post">
-        {% csrf_token %}
+
+      <!-- Offer Form -->
+      {% if user.is_authenticated %}
+        <div class="mt-4">
+          <form action="{% url 'make-offer' property.id %}" method="post">
+            {% csrf_token %}
             {{ form }}
-            <button class="btn btn-primary" >Submit a purchase offer</button>
-        </form>
-    {% endif %}
+            <button class="btn btn-primary mt-2">Submit a purchase offer</button>
+          </form>
+        </div>
+      {% endif %}
     </div>
   </div>
 
@@ -71,16 +77,16 @@
               <img src="{{ p.images.first.image.url }}" class="card-img-top" alt="...">
             {% else %}
               <img src="{% static 'images/featured_apartment.jpg' %}" class="card-img-top" alt="...">
-            {% endif %}<div class="card-body">
+            {% endif %}
+            <div class="card-body">
               <h5 class="card-title">{{ p.address }}</h5>
               <p class="card-text">{{ p.price }} ISK</p>
               <a href="{% url 'property_by_id' p.id %}" class="btn btn-sm btn-primary">View</a>
-                </div>
+            </div>
           </div>
         </div>
       {% endfor %}
-        </div>
     </div>
   </div>
-
+</div>
 {% endblock %}

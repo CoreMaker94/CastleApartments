@@ -62,14 +62,14 @@ def get_profile_by_id(request, id):
     # If buyer
     if profile.type_id == 1: # TODO check if this still works after changes
         purchaseoffers = Offer.objects.filter(buyer_id=id)
-        return render(request, 'profile/profile.html', {
+        return render(request, 'user/profile.html', {
             'profile': profile,
             'purchaseoffers': purchaseoffers
         })
     # If seller
     else:
         properties = Property.objects.filter(seller_id=id)
-        return render(request, 'profile/profile.html', {
+        return render(request, 'user/profile.html', {
             'profile': profile,
             'properties': properties
         })
