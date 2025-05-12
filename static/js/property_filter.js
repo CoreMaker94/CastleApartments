@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const priceOrder = document.getElementById("price-filter")?.value || "";
       const propertiesPlaceholder = document.getElementById("property-grid");
 
-
       const query = new URLSearchParams({
         search_filter: search,
         zipcode: zipcode,
@@ -24,8 +23,10 @@ document.addEventListener("DOMContentLoaded", function () {
           const json = await response.json();
           const properties = json.data;
 
-          const html = properties
-            .map((property) => `
+          let html = "";
+
+          if (properties.length > 0) {
+            html = properties.map((property) => `
               <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                   <img src="${property.image}" class="card-img-top" alt="Property Image">
@@ -38,10 +39,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 </div>
               </div>
             `).join("");
+          } else {
+            html = `
+              <div class="col-12 text-center mt-4">
+                <div class="alert alert-warning" role="alert">
+                  No properties found matching your criteria.
+                </div>
+              </div>
+            `;
+          }
 
           propertiesPlaceholder.innerHTML = html;
         } else {
-          propertiesPlaceholder.innerHTML = "<p>Failed to load properties.</p>";
+          propertiesPlaceholder.innerHTML = "<p class='text-danger'>Failed to load properties.</p>";
         }
       } catch (error) {
         console.error("Error fetching properties:", error);
