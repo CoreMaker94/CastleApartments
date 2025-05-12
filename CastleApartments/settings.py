@@ -141,3 +141,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/user/profile' # TODO this should redirect to YOUR profile
 LOGOUT_REDIRECT_URL = '/'
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',  # maps error to Bootstrap's red alert
+}
