@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from purchaseoffer.models import Offer
@@ -26,46 +27,58 @@ def register(request):
 
 # Own profile view, with offers
 def profile(request):
-    # Get their profile information
-    user_profile = Profile.objects.get(user=request.user)
-    # For updating a profile
-    if request.method == "POST":
-        if user_profile.type.id == 1:
-            form = BuyerProfileForm(request.POST, request.FILES, instance=user_profile)
-        else:
-            form = SellerProfileForm(request.POST, request.FILES, instance=user_profile)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.user = request.user
-            instance.save()
-            return redirect('profile')
+    user_profile = (
+        Profile.objects
+        .select_related('type', 'zipcode__city')
+        .only(
+            'name',
+            'image',
+            'bio',
+            'type__name',
+            'zipcode__code',
+            'zipcode__city__name',
+            'user'
+        )
+        .get(user=request.user)
+    )
 
-    # Sending the form for get request
-    if user_profile.type.id == 1:
-        form = BuyerProfileForm(instance=user_profile)
+    if request.method == "POST":
+        form_class = BuyerProfileForm if user_profile.type.id == 1 else SellerProfileForm
+        form = form_class(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
     else:
-        form = SellerProfileForm(instance=user_profile)
+        form_class = BuyerProfileForm if user_profile.type.id == 1 else SellerProfileForm
+        form = form_class(instance=user_profile)
+
     return render(request, 'user/profile.html', {
-        'form' : form,
-        'profile' : user_profile,
+        'form': form,
+        'profile': user_profile,
     })
 
 # TODO Fix visit view
 # TODO "should" not allow viewing buyers, unless difficult to implement
 # User visitation view
 def get_profile_by_id(request, id):
-    profile = Profile.objects.get(user_id=id) # TODO fix this, maybe has to be id=id
-    # If buyer
-    if profile.type_id == 1: # TODO check if this still works after changes
-        purchaseoffers = Offer.objects.filter(buyer_id=id)
-        return render(request, 'profile/profile.html', {
-            'profile': profile,
-            'purchaseoffers': purchaseoffers
-        })
-    # If seller
-    else:
-        properties = Property.objects.filter(seller_id=id)
-        return render(request, 'profile/profile.html', {
-            'profile': profile,
-            'properties': properties
-        })
+    profile = (
+        Profile.objects
+        .select_related('type', 'zipcode__city', 'user')
+        .get(user_id=id)
+    )
+
+    # Prevent public viewing of buyer profiles
+    if profile.type_id == 1 and request.user.id == profile.user.id:
+        # Buyer is trying to view own profile, redirect to profile
+        return redirect('profile')
+
+    elif profile.type_id == 1 and request.user.id != profile.user.id:
+        # Another user trying to access Buyer profile that is not theirs
+        raise Http404
+
+    properties = Property.objects.filter(seller_id=id).select_related('zipcode', 'seller')
+
+    return render(request, 'user/profile.html', {
+        'profile': profile,
+        'properties': properties
+    })

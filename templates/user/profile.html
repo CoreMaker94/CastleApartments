@@ -18,18 +18,20 @@
             </div>
             <!-- Profile information -->
         <div class="row-2">
-            {% if profile.type == 1 %}
+            {% if profile.type_id == 1 %}
                 {% include 'user/_buyer_info.html' with profile=profile %}
             {% else %}
                 {% include 'user/_seller_info.html' with profile=profile %}
             {% endif %}
         </div>
         {# Hidden profile form #}
-        <form id="edit-profile-form" style="display: none" method="post" enctype="multipart/form-data" action="{% url 'profile' %}">
-            {% csrf_token %}
-            {{ form }}
-            <input type="submit" class="btn btn-primary" value="Update"/>
-        </form>
-        <button id="toggle-edit-profile-button" class="btn btn-primary" onclick="displayEditSellerProfileButtonForm()" value="Submit a purchase offer"></button>
+        {% if request.user == profile.user %}{# Don't want to render this when others are checking the page #}
+            <form id="edit-profile-form" style="display: none" method="post" enctype="multipart/form-data" action="{% url 'profile' %}">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" class="btn btn-primary" value="Update"/>
+            </form>
+            <button id="toggle-edit-profile-button" class="btn btn-primary" onclick="displayEditProfileButtonForm()" value="Submit a purchase offer"></button>
+        {% endif %}
     </div>
 {% endblock %}
