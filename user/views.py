@@ -6,6 +6,7 @@ from purchaseoffer.models import Offer
 from property.models import Property
 from user.forms.profile_form import BuyerProfileForm, SellerProfileForm, CustomUserCreationForm
 from user.models import Profile
+from django.contrib import messages
 
 
 def register(request):
@@ -47,7 +48,13 @@ def profile(request):
         form = form_class(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
             form.save()
+            messages.success(request, "Profile successfully updated!")
             return redirect('profile')
+
+        else:
+            messages.error(request, "There was a problem updating your profile. Please check the form.")
+
+    # Sending the form for get request
     else:
         form_class = BuyerProfileForm if user_profile.type.id == 1 else SellerProfileForm
         form = form_class(instance=user_profile)
