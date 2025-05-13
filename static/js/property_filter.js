@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Fetch data (example URL — change if needed)
       try {
 
-        const response = await fetch(`${query}`);
+        const response = await fetch(`?${query}`);
         console.log(response)
         if (response.ok) {
           const json = await response.json();
