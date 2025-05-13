@@ -1,24 +1,23 @@
 {% load static %}
 
-<div class="single-offer">
-  <div class="offer-left">
-      {{ offer.property.address }}
-      {{ offer.offer }}
-      {{ offer.seller.name }}
+<div class="p-3 border border-dark rounded shadow-sm bg-light h-100">
+  <div class="mb-2">
+      <strong>{{ offer.property.address }}</strong><br>
+      Offer: {{ offer.offer }}<br>
+      Seller: {{ offer.seller.name }}
   </div>
-  <div class="offer-left">
-      {{ offer.created_at }}
-      {{ offer.expires_at }}
-      {{ offer.status }}
+  <hr class="my-2 border-dark">
+  <div>
+      Created: {{ offer.created_at }}<br>
+      Expires: {{ offer.expires_at }}<br>
+      Status: {{ offer.status }}<br>
 
-      <!--Show finalize button ONLY to buyer if offer is accepted -->
-      {% if is_buyer and offer.status == "Accepted" %}
-         {% if not offer.is_finalized %}
-             <a href="{{ offer.finalize_url }}" class="btn btn-success btn-sm">Finalize Purchase</a>
-         {% else %}
-             <span class="badge bg-success">Finalized</span>
-         {% endif %}
+      {% if is_buyer %}
+          {% if offer.status == "Accepted" or offer.status == "Contingent" %}
+              <a href="{{ offer.finalize_url }}" class="btn btn-success btn-sm mt-2">Finalize Purchase</a>
+          {% endif %}
       {% endif %}
-
   </div>
 </div>
+
+

@@ -14,7 +14,7 @@ from purchaseoffer.models import Offer, Status
 from user.models import Profile
 from django.contrib import messages
 from django.utils.timezone import now
-from purchaseoffer.models import Finalize
+from purchaseoffer.models import Finalize, PaymentMethod
 
 
 
@@ -93,7 +93,7 @@ def get_offers(request):
     for offer in offers.select_related("property", "status", "property__seller__profile"):
         offers_data.append({
             "id": offer.id,
-            "price": offer.offer,
+            "offer": offer.offer,
             "status": offer.status.name,
             "created_at": offer.created_at,
             "expires_at": offer.expires_at,
@@ -150,16 +150,15 @@ def change_status_seller(request, id):
 @login_required
 def finalize_offer(request, id):
     offer = get_object_or_404(Offer, id=id)
-    # Prevent double finalization
-    if Finalize.objects.filter(offer=offer).exists():
-        messages.warning(request, "This offer has already been finalized.")
-        return redirect("get_offers")
 
     if offer.buyer != request.user or offer.status.name != "Accepted":
         messages.error(request, "You are not authorized to finalize this offer.")
         return redirect("get_offers")
 
     step = request.GET.get("step", "contact")
+    if request.method == "POST":
+        step = request.POST.get("step", step)  # ✅ Override step on POST
+
     session_key = f"finalize_offer_{offer.id}"
     stored_data = request.session.get(session_key, {})
 
@@ -173,7 +172,6 @@ def finalize_offer(request, id):
 
         elif step == "payment":
             stored_data["payment_method"] = request.POST.get("payment_method", "")
-
             if stored_data["payment_method"] == "card":
                 stored_data["card_number"] = request.POST.get("card_number", "")
                 stored_data["exp_date"] = request.POST.get("exp_date", "")
@@ -181,7 +179,6 @@ def finalize_offer(request, id):
             elif stored_data["payment_method"] == "loan":
                 stored_data["loan_bank"] = request.POST.get("loan_bank", "")
                 stored_data["loan_ref"] = request.POST.get("loan_ref", "")
-
             request.session[session_key] = stored_data
             return redirect(f"{request.path}?step=review")
 
@@ -189,25 +186,50 @@ def finalize_offer(request, id):
             request.session[session_key] = stored_data
             return redirect(f"{request.path}?step=confirm")
 
-
         elif step == "confirm":
-            # prevent double save just in case
             if not Finalize.objects.filter(offer=offer).exists():
+                try:
+                    # Map internal form values to DB values
+                    payment_map = {
+                        "card": "Credit Card",
+                        "loan": "Loan"
+                    }
+
+                    payment_key = stored_data.get("payment_method")
+                    payment_name = payment_map.get(payment_key)
+
+                    if not payment_name:
+                        messages.error(request, "Invalid payment method.")
+                        return redirect("get-offers")
+
+                    try:
+                        method = PaymentMethod.objects.get(name=payment_name)
+                    except PaymentMethod.DoesNotExist:
+                        messages.error(request, "Selected payment method is not available.")
+                        return redirect("get-offers")
+
+                except PaymentMethod.DoesNotExist:
+                    messages.error(request, "Invalid payment method.")
+                    return redirect("get-offers")
+
                 Finalize.objects.create(
                     offer=offer,
                     buyer_address="placeholder address",
                     buyer_zipcode="101",
                     buyer_country="Iceland",
                     buyer_city="Reykjavík",
-                    pay_method=PaymentMethod.objects.get(name=stored_data["payment_method"])
+                    pay_method=method
                 )
+
+                finalized_status = Status.objects.get(name="Finalized")
+                offer.status = finalized_status
+                offer.save()
+
             request.session.pop(session_key, None)
-            messages.success(request, "Your purchase has been successfully submitted!")
-            return redirect("get_offers")
+            step = "confirm"  # ✅ Tell the template to show the confirmation step
 
     return render(request, "purchaseoffer/finalize_offer.html", {
         "offer": offer,
         "step": step,
         "form_data": stored_data,
     })
-

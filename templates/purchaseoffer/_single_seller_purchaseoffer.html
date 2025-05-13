@@ -1,33 +1,42 @@
-<div class="single-offer">
-    <div class="offer-left">
-        {{ offer.property.address }}
-        {{ offer.offer }}
-        {{ offer.seller.name }}
-    </div>
-    <div class="offer-left">
-        {{ offer.created_at }}
-        {{ offer.expires_at }}
-        {{ offer.status }}
+{% load static %}
 
-        {% if offer.status == "Pending" %}
-            <!-- Accept Form -->
-            <form action="{% url 'change_status_seller' offer.id %}" method="post" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="status" value="Accepted">
-                <button type="submit" class="btn btn-success btn-sm">Accept</button>
-            </form>
+<div class="p-3 border border-dark rounded shadow-sm bg-light h-100">
+  <div class="mb-2">
+    <strong>{{ offer.property.address }}</strong><br>
+    Offer: {{ offer.offer }}<br>
+    Seller: {{ offer.seller.name }}
+  </div>
 
-            <!-- Reject Form -->
-            <form action="{% url 'change_status_seller' offer.id %}" method="post" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="status" value="Rejected">
-                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-            </form>
+  <hr class="my-2 border-dark">
 
-            <!-- Contingent Form -->
-            <form action="{% url 'change_status_seller' offer.id %}" method="post" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="status" value="Contingent">
-                <button type="submit" class="btn btn-warning btn-sm">Contingent</button>
-            </form>
-        {% endif %}
+  <div>
+    Created: {{ offer.created_at }}<br>
+    Expires: {{ offer.expires_at }}<br>
+    Status: <strong>{{ offer.status }}</strong><br>
+
+    {% if offer.status == "Pending" %}
+      <div class="mt-2">
+        <!-- Accept -->
+        <form action="{% url 'change_status_seller' offer.id %}" method="post" class="d-inline">
+          {% csrf_token %}
+          <input type="hidden" name="status" value="Accepted">
+          <button type="submit" class="btn btn-success btn-sm">Accept</button>
+        </form>
+
+        <!-- Reject -->
+        <form action="{% url 'change_status_seller' offer.id %}" method="post" class="d-inline">
+          {% csrf_token %}
+          <input type="hidden" name="status" value="Rejected">
+          <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+        </form>
+
+        <!-- Contingent -->
+        <form action="{% url 'change_status_seller' offer.id %}" method="post" class="d-inline">
+          {% csrf_token %}
+          <input type="hidden" name="status" value="Contingent">
+          <button type="submit" class="btn btn-warning btn-sm">Contingent</button>
+        </form>
+      </div>
+    {% endif %}
+  </div>
+</div>

@@ -2,16 +2,23 @@
 {# TODO Add authorization authentication so not everyone see's others purchase offers #}
 {% extends 'base.html' %}
 {% block content %}
-<div class="mt-5">
-        <h4>Purchase Offers</h4>
-    {% if is_buyer %}
-        {% for offer in offers %}
-            {% include "purchaseoffer/_single_buyer_purchaseoffer.html" with offer=offer %}
-        {% endfor %}
-    {% else %}
-        {% for offer in offers %}
-            {% include "purchaseoffer/_single_seller_purchaseoffer.html" with offer=offer %}
-        {% endfor %}
-    {% endif %}
+<div class="container mt-5">
+    <h4 class="mb-4">Purchase Offers</h4>
+    <div class="row g-4">
+        {% if is_buyer %}
+            {% for offer in offers %}
+                <div class="col-md-6 col-lg-4">
+                    {% include "purchaseoffer/_single_buyer_purchaseoffer.html" with offer=offer %}
+                </div>
+            {% endfor %}
+        {% else %}
+            {% for offer in offers %}
+                <div class="col-md-6 col-lg-4">
+                    {% include "purchaseoffer/_single_seller_purchaseoffer.html" with offer=offer %}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
 </div>
+
 {% endblock %}
