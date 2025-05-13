@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Finalize Purchase – {{ offer.property.address }}</h2>
+
+  <!-- Step Tabs -->
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a class="nav-link {% if step == 'contact' %}active{% endif %}" href="?step=contact">Contact</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if step == 'payment' %}active{% endif %}" href="?step=payment">Payment</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if step == 'review' %}active{% endif %}" href="?step=review">Review</a>
+    </li>
+  </ul>
+
+  {% if step == "contact" %}
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label>Name</label>
+        <input type="text" name="name" class="form-control" value="{{ form_data.name }}">
+      </div>
+      <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" value="{{ form_data.email }}">
+      </div>
+      <div class="mb-3">
+        <label>Phone</label>
+        <input type="text" name="phone" class="form-control" value="{{ form_data.phone }}">
+      </div>
+      <button type="submit" class="btn btn-primary">Next</button>
+    </form>
+
+  {% elif step == "payment" %}
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label>Payment Method</label>
+        <select name="payment_method" class="form-select" required onchange="togglePaymentFields(this.value)">
+          <option value="">Select...</option>
+          <option value="card" {% if form_data.payment_method == "card" %}selected{% endif %}>Credit Card</option>
+          <option value="loan" {% if form_data.payment_method == "loan" %}selected{% endif %}>Loan</option>
+        </select>
+      </div>
+
+      <div id="card-fields" style="display: none;">
+        <div class="mb-3">
+          <label>Card Number</label>
+          <input type="text" name="card_number" class="form-control"
+                 value="{{ form_data.card_number }}" pattern="\d{12,19}" maxlength="19"
+                 title="Enter a valid card number (12–19 digits)">
+        </div>
+        <div class="mb-3">
+          <label>Expiration Date</label>
+          <input type="text" name="exp_date" class="form-control"
+                 value="{{ form_data.exp_date }}" pattern="^(0[1-9]|1[0-2])\/\d{2}$"
+                 title="Format must be MM/YY" placeholder="MM/YY">
+        </div>
+        <div class="mb-3">
+          <label>CVV</label>
+          <input type="text" name="cvv" class="form-control"
+                 value="{{ form_data.cvv }}" pattern="^\d{3}$" maxlength="3"
+                 title="3-digit CVV">
+        </div>
+      </div>
+
+      <div id="loan-fields" style="display: none;">
+        <div class="mb-3">
+          <label>Choose Bank</label>
+          <select name="loan_bank" class="form-select">
+            <option value="">Select a bank...</option>
+            <option value="Arion" {% if form_data.loan_bank == "Arion" %}selected{% endif %}>Arion Banki</option>
+            <option value="Landsbankinn" {% if form_data.loan_bank == "Landsbankinn" %}selected{% endif %}>Landsbankinn</option>
+            <option value="Íslandsbanki" {% if form_data.loan_bank == "Íslandsbanki" %}selected{% endif %}>Íslandsbanki</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label>Loan Reference</label>
+          <input type="text" name="loan_ref" class="form-control" value="{{ form_data.loan_ref }}">
+        </div>
+      </div>
+
+      <a href="?step=contact" class="btn btn-secondary">Back</a>
+      <button type="submit" class="btn btn-primary">Next</button>
+    </form>
+
+    <script>
+      function togglePaymentFields(value) {
+        document.getElementById("card-fields").style.display = value === "card" ? "block" : "none";
+        document.getElementById("loan-fields").style.display = value === "loan" ? "block" : "none";
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        togglePaymentFields(document.querySelector("select[name='payment_method']").value);
+      });
+    </script>
+
+  {% elif step == "review" %}
+    <div class="mb-3">
+      <strong>Contact Info</strong><br>
+      Name: {{ form_data.name }}<br>
+      Email: {{ form_data.email }}<br>
+      Phone: {{ form_data.phone }}
+    </div>
+
+    {% if form_data.payment_method == "card" %}
+      <div class="mb-3">
+        <strong>Credit Card</strong><br>
+        Card ending in: ****{{ form_data.card_number|slice:"-4:" }}<br>
+        Exp: {{ form_data.exp_date }}
+      </div>
+    {% elif form_data.payment_method == "loan" %}
+      <div class="mb-3">
+        <strong>Loan</strong><br>
+        Bank: {{ form_data.loan_bank }}<br>
+        Reference: {{ form_data.loan_ref }}
+      </div>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      <a href="?step=payment" class="btn btn-secondary">Back</a>
+      <button type="submit" class="btn btn-success">Confirm Purchase</button>
+    </form>
+
+  {% elif step == "confirm" %}
+    <div class="text-center mt-5">
+      <h2 class="text-success">🎉 Purchase Successful!</h2>
+      <p>Thank you for finalizing your purchase for <strong>{{ offer.property.address }}</strong>.</p>
+      <a href="{% url 'home' %}" class="btn btn-primary mt-3">Back to Homepage</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

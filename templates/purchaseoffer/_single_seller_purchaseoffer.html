@@ -8,10 +8,26 @@
         {{ offer.created_at }}
         {{ offer.expires_at }}
         {{ offer.status }}
+
         {% if offer.status == "Pending" %}
-            <button>Accept</button>
-            <button>Reject</button>
-            <button>Contingent</button>
+            <!-- Accept Form -->
+            <form action="{% url 'change_status_seller' offer.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="status" value="Accepted">
+                <button type="submit" class="btn btn-success btn-sm">Accept</button>
+            </form>
+
+            <!-- Reject Form -->
+            <form action="{% url 'change_status_seller' offer.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="status" value="Rejected">
+                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+            </form>
+
+            <!-- Contingent Form -->
+            <form action="{% url 'change_status_seller' offer.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="status" value="Contingent">
+                <button type="submit" class="btn btn-warning btn-sm">Contingent</button>
+            </form>
         {% endif %}
-    </div>
-</div>
