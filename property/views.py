@@ -23,8 +23,10 @@ def property_list(request):
 
         # Zip code filter
         zip_filter = request.GET.get('zip_filter')
+        print(zip_filter)
         if zip_filter:
             zipcodes_ids = zip_filter.split(',')
+            print(zipcodes_ids)
             properties = properties.filter(zipcode__id__in=zipcodes_ids)
 
         # Property type filter
@@ -54,6 +56,9 @@ def property_list(request):
                     'price': x.price,
                     'type': x.type.name,
                     'zipcode': x.zipcode.code,
+                    'beds': x.beds,
+                    'bath': x.bath,
+                    'size': x.size,
                     'image': x.images.first().image.url if x.images.first() else ""
                 } for x in properties
             ]
