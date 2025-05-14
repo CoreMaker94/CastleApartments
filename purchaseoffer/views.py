@@ -15,6 +15,8 @@ from user.models import Profile
 from django.contrib import messages
 from django.utils.timezone import now
 from purchaseoffer.models import Finalize, PaymentMethod
+import pycountry
+
 
 
 
@@ -90,9 +92,10 @@ def get_offers(request):
 
     offers_data = []
 
-    for offer in offers.select_related("property", "status", "property__seller__profile"):
+    for offer in offers.select_related("property", "status", "property__seller__profile", "buyer__profile"):
         offers_data.append({
             "id": offer.id,
+            "buyer": offer.buyer.profile.name,
             "offer": offer.offer,
             "status": offer.status.name,
             "created_at": offer.created_at,
@@ -135,7 +138,7 @@ def change_status_seller(request, id):
 
     # Get new status from POST (e.g., "Accepted" or "Rejected")
     new_status_name = request.POST.get("status")
-    if new_status_name not in ["Accepted", "Rejected"]:
+    if new_status_name not in ["Accepted", "Rejected", "Contingent"]:
         messages.error(request, "Invalid status.")
         return redirect("get-offers")
 
@@ -151,9 +154,13 @@ def change_status_seller(request, id):
 def finalize_offer(request, id):
     offer = get_object_or_404(Offer, id=id)
 
-    if offer.buyer != request.user or offer.status.name != "Accepted":
+    if offer.buyer != request.user:
         messages.error(request, "You are not authorized to finalize this offer.")
         return redirect("get_offers")
+
+    if offer.status.name not in ["Accepted", "Contingent"]:
+        messages.error(request, "You are not authorized to finalize this offer.")
+        return redirect("get-offers")
 
     step = request.GET.get("step", "contact")
     if request.method == "POST":
@@ -164,21 +171,29 @@ def finalize_offer(request, id):
 
     if request.method == "POST":
         if step == "contact":
-            stored_data["name"] = request.POST.get("name", "")
-            stored_data["email"] = request.POST.get("email", "")
             stored_data["phone"] = request.POST.get("phone", "")
+            stored_data["address"] = request.POST.get("address", "")
+            stored_data["city"] = request.POST.get("city", "")
+            stored_data["zipcode"] = request.POST.get("zipcode", "")
+            stored_data["country"] = request.POST.get("country", "")
+            stored_data["national_id"] = request.POST.get("national_id", "")
             request.session[session_key] = stored_data
             return redirect(f"{request.path}?step=payment")
+
 
         elif step == "payment":
             stored_data["payment_method"] = request.POST.get("payment_method", "")
             if stored_data["payment_method"] == "card":
+                stored_data["cardholder"] = request.POST.get("cardholder", "")
                 stored_data["card_number"] = request.POST.get("card_number", "")
                 stored_data["exp_date"] = request.POST.get("exp_date", "")
                 stored_data["cvv"] = request.POST.get("cvv", "")
             elif stored_data["payment_method"] == "loan":
                 stored_data["loan_bank"] = request.POST.get("loan_bank", "")
                 stored_data["loan_ref"] = request.POST.get("loan_ref", "")
+            elif stored_data["payment_method"] == "transfer":
+                stored_data["bank_account"] = request.POST.get("bank_account", "")
+
             request.session[session_key] = stored_data
             return redirect(f"{request.path}?step=review")
 
@@ -192,7 +207,8 @@ def finalize_offer(request, id):
                     # Map internal form values to DB values
                     payment_map = {
                         "card": "Credit Card",
-                        "loan": "Loan"
+                        "loan": "Loan",
+                        "transfer": "Bank Transfer",
                     }
 
                     payment_key = stored_data.get("payment_method")
@@ -227,9 +243,15 @@ def finalize_offer(request, id):
 
             request.session.pop(session_key, None)
             step = "confirm"  # ✅ Tell the template to show the confirmation step
+    countries = get_country_choices()
 
     return render(request, "purchaseoffer/finalize_offer.html", {
         "offer": offer,
         "step": step,
         "form_data": stored_data,
+        "countries": countries
     })
+
+
+def get_country_choices():
+    return sorted([(country.name, country.name) for country in pycountry.countries], key=lambda x: x[0])
