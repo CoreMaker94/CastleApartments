@@ -69,12 +69,16 @@
 }
 
 /* PAGE LAYOUT */
-html, body {
+html {
   height: 100%;
+}
+
+body {
+  min-height: 100vh;
   margin: 0;
   background: linear-gradient(to bottom, #60A6D8, #D5EEFF);
-  display: flex;
-  flex-direction: column;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* optional for smoother scrolling effect */
 }
 
 main {
