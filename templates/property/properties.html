@@ -6,35 +6,34 @@
       <form id="filter-form" method="get">
             <div class="row justify-content-center mb-4 text-center">
               <!-- Zip Code Dropdown -->
-              <div class="col-md-3 mb-2">
-                <select id="zipcode-filter" name="zipcode" class="form-select">
-                  <option value="">Zip Code</option>
-                  {% for zip in zipcodes %}
-                    <option value="{{ zip }}" {% if zip == request.GET.zipcode %}selected{% endif %}>
-                      {{ zip }}
-                    </option>
-                  {% endfor %}
-                </select>
-              </div>
-
+                <div class="col-md-3 mb-2 dropdown" id="ZipcodeDropdown">
+                    <div class="form-control dropdown-button" onclick="toggleDropdown1()">Select Zipcodes</div>
+                      <div class="dropdown-content">
+                        {% for area in areas %}
+                            {% include "property/_area_list.html" with area=area %}
+                        {% endfor %}
+                      </div>
+                </div>
               <!-- Property Type Dropdown -->
-              <div class="col-md-3 mb-2">
-                <select id="type-filter" name="property_type" class="form-select">
-                  <option value="">Property Type</option>
-                  {% for type in property_types %}
-                    <option value="{{ type }}" {% if type == request.GET.property_type %}selected{% endif %}>
-                      {{ type }}
-                    </option>
-                  {% endfor %}
-                </select>
+              <div class="col-md-3 mb-2 dropdown" id="TypeDropdown">
+                  <div class="form-control dropdown-button" onclick="toggleDropdown2()">Select Types of property</div>
+                      <div class="dropdown-content" id="TypeDropdown">
+                        <ul class="filter-list">
+                            {% for type in property_types %}
+                                {% include "property/_type_list.html" with type=type %}
+                            {% endfor %}
+                        </ul>
+                      </div>
               </div>
 
               <!-- Price Order Dropdown -->
               <div class="col-md-3 mb-2">
-                <select id="price-filter" name="price_order" class="form-select">
-                  <option value="">Price</option>
-                  <option value="low" {% if request.GET.price_order == 'low' %}selected{% endif %}>Low to High</option>
-                  <option value="high" {% if request.GET.price_order == 'high' %}selected{% endif %}>High to Low</option>
+                <select id="order_by" name="order_by" class="form-select">
+                  <option value="">Order by</option>
+                  <option value="p-asc" {% if request.GET.price_order == 'low' %}selected{% endif %}>Price ascending</option>
+                  <option value="p-desc" {% if request.GET.price_order == 'high' %}selected{% endif %}>Price descending</option>
+                  <option value="n-asc" {% if request.GET.price_order == 'high' %}selected{% endif %}>Address ascending</option>
+                  <option value="n-desc" {% if request.GET.price_order == 'high' %}selected{% endif %}>Address descending</option>
                 </select>
               </div>
             </div>

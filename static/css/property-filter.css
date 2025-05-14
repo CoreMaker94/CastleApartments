@@ -1,0 +1,34 @@
+.filter-list{
+    list-style-type: none;
+    text-align: left;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-button {
+  padding: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background-color: #f9f9f9;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  overflow-y: auto;
+  z-index: 1;
+  padding: 10px;
+}
+
+.dropdown-content label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.dropdown.show .dropdown-content {
+  display: block;
+}

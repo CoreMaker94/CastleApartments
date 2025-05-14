@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.http import JsonResponse
 from django.shortcuts import render
 from property.models import Property
@@ -10,30 +12,41 @@ from purchaseoffer.forms import purchase_offer_form
 
 
 def property_list(request):
-    if 'search_filter' in request.GET:
+    # Check if there are any search params
+    if request.GET:
         properties = Property.objects.all()
 
         # Address search
-        search_query = request.GET.get('search_filter', '').strip()
+        search_query = request.GET.get('address_name', '').strip()
         if search_query:
             properties = properties.filter(address__icontains=search_query)
 
         # Zip code filter
-        zipcode = request.GET.get('zipcode')
-        if zipcode:
-            properties = properties.filter(zipcode__code=zipcode)
+        zip_filter = request.GET.get('zip_filter')
+        print(zip_filter)
+        if zip_filter:
+            zipcodes_ids = zip_filter.split(',')
+            print(zipcodes_ids)
+            properties = properties.filter(zipcode__id__in=zipcodes_ids)
 
         # Property type filter
-        property_type = request.GET.get('property_type')
-        if property_type:
-            properties = properties.filter(type__name=property_type)
+        type_filter = request.GET.get('type_filter')
+        if type_filter:
+            print("Type Filter Query:", type_filter)
+            property_types_ids = type_filter.split(",")
+            properties = properties.filter(type__id__in=property_types_ids)
 
-        # Price sorting
-        price_order = request.GET.get('price_order')
-        if price_order == 'low':
-            properties = properties.order_by('price')
-        elif price_order == 'high':
-            properties = properties.order_by('-price')
+        # Price sorting - Should be orderby and check name also
+        order_by = request.GET.get('order_by')
+        if order_by:
+            if order_by == 'p-asc':
+                properties = properties.order_by('-price')
+            elif order_by == 'p-desc':
+                properties = properties.order_by('price')
+            elif order_by == 'n-asc':
+                properties = properties.order_by('address')
+            elif order_by == 'n-desc':
+                properties = properties.order_by('-address')
 
         return JsonResponse({
             'data': [
@@ -43,6 +56,9 @@ def property_list(request):
                     'price': x.price,
                     'type': x.type.name,
                     'zipcode': x.zipcode.code,
+                    'beds': x.beds,
+                    'bath': x.bath,
+                    'size': x.size,
                     'image': x.images.first().image.url if x.images.first() else ""
                 } for x in properties
             ]
@@ -50,13 +66,28 @@ def property_list(request):
 
     # For page load
     properties = Property.objects.all()
-    zipcodes = Property.objects.values_list('zipcode__code', flat=True).distinct()
-    property_types = Property.objects.select_related('type').values_list('type__name', flat=True).distinct()
+    property_types_ids = Type.objects.all()
+    # Korri's zipcode testing
+    zipcodes_ids = ZipCode.objects.select_related('area', 'city').all()
+
+    area_map = defaultdict(list)
+    for z in zipcodes_ids:
+        area_map[z.area.name].append({
+            "id": z.id,
+            "code": z.code,
+            "city": z.city.name
+        })
+    areas = []
+    for area_name, zips in area_map.items():
+        areas.append({
+            "area": area_name,
+            "zipcodes": zips
+        })
 
     return render(request, "property/properties.html", {
         "properties": properties,
-        "zipcodes": zipcodes,
-        "property_types": property_types,
+        "areas": areas,
+        "property_types": property_types_ids,
     })
 
 # view home

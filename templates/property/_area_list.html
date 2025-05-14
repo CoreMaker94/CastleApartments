@@ -1,0 +1,8 @@
+<div class="single-area" id="area-{{ area.area }}">
+    <strong>{{ area.area }}</strong>
+    <ul class="filter-list">
+        {% for zip in area.zipcodes %}
+            {% include "property/_zipcode_list.html" with zip=zip %}
+        {% endfor %}
+    </ul>
+</div>
