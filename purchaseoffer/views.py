@@ -151,13 +151,13 @@ def change_status_seller(request, id):
 def finalize_offer(request, id):
     offer = get_object_or_404(Offer, id=id)
 
-    if offer.buyer != request.user or offer.status.name != "Accepted":
+    if offer.buyer != request.user:
         messages.error(request, "You are not authorized to finalize this offer.")
         return redirect("get_offers")
 
     step = request.GET.get("step", "contact")
     if request.method == "POST":
-        step = request.POST.get("step", step)  # ✅ Override step on POST
+        step = request.POST.get("step", step)
 
     session_key = f"finalize_offer_{offer.id}"
     stored_data = request.session.get(session_key, {})
@@ -226,7 +226,7 @@ def finalize_offer(request, id):
                 offer.save()
 
             request.session.pop(session_key, None)
-            step = "confirm"  # ✅ Tell the template to show the confirmation step
+            step = "confirm"  #  Tell the template to show the confirmation step
 
     return render(request, "purchaseoffer/finalize_offer.html", {
         "offer": offer,
