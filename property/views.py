@@ -44,9 +44,9 @@ def property_list(request):
             elif order_by == 'p-desc':
                 properties = properties.order_by('price')
             elif order_by == 'n-asc':
-                properties = properties.order_by('name')
+                properties = properties.order_by('address')
             elif order_by == 'n-desc':
-                properties = properties.order_by('-name')
+                properties = properties.order_by('-address')
 
         return JsonResponse({
             'data': [
