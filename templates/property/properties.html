@@ -17,7 +17,7 @@
               <!-- Property Type Dropdown -->
               <div class="col-md-3 mb-2 dropdown" id="TypeDropdown">
                   <div class="form-control dropdown-button" onclick="toggleDropdown2()">Select Types of property</div>
-                      <div class="dropdown-content" id="TypeDropdown">
+                      <div class="dropdown-content">
                         <ul class="filter-list">
                             {% for type in property_types %}
                                 {% include "property/_type_list.html" with type=type %}

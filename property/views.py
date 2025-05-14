@@ -1,9 +1,15 @@
 from collections import defaultdict
+from datetime import date
 
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render
-from property.models import Property
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+from property.forms.property_form import CreatePropertyForm, PropertyImageForm
+from property.models import Property, PropertyImage
 from purchaseoffer.forms.purchase_offer_form import PurchaseOfferForm
+from user.models import Profile, Type as ProfileType
 from zipcode.models import ZipCode
 from property.models import Type
 from django.db.models import Q
@@ -113,3 +119,54 @@ def property_by_id(request, id):
         "offer": offer,
         "form" : form,
     })
+
+@login_required
+def create_property(request):
+    type_buyer = ProfileType.objects.get(name="Buyer")
+    profile = Profile.objects.get(user=request.user)
+
+    # Enforce Seller
+    if profile.type == type_buyer:
+        messages.error(request, "Buyers are not allowed to create properties")
+        return redirect('home')
+
+    if request.method == "POST":
+        property_form = CreatePropertyForm(request.POST)
+        images_form = PropertyImageForm(request.POST, request.FILES)
+        if property_form.is_valid() and images_form.is_valid():
+            # Validate prop form and then save
+            # Check if rooms >= beds
+            new_property = property_form.save(commit=False)
+            new_property.seller = request.user
+            new_property.list_date = date.today()
+            new_property.is_sold = False
+            new_property.save()
+
+            PropertyImage.objects.create(
+                property=new_property,
+                image=images_form.cleaned_data['image'],
+                is_main=True
+            )
+
+            other_images = request.FILES.getlist("other_images")
+
+            for image in other_images:
+                image_ins = PropertyImage(property=new_property, image=image, is_main=False)
+                image_ins.save()
+            messages.success(request, "Property created successfully")
+            return redirect('property_by_id', id=new_property.id)
+        else:
+            print("Prop_form errors:", property_form.errors)
+            print("Image form errors:", images_form.errors)
+            messages.error(request, f"Please enter a valid property")
+            return render(request, "property/create_property.html", {
+                'property_form': property_form,
+                'images_form': images_form
+            })
+    else:
+        property_form = CreatePropertyForm()
+        images_form = PropertyImageForm()
+        return render(request, 'property/create_property.html', {
+            'property_form': property_form,
+            'images_form': images_form,
+        })
