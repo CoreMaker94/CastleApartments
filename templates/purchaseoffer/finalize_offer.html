@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Finalize Purchase – {{ offer.property.address }}</h2>
+
+  <!-- Step Tabs -->
+  <ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a class="nav-link {% if step == 'contact' %}active{% endif %}" href="?step=contact">Contact</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if step == 'payment' %}active{% endif %}" href="?step=payment">Payment</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if step == 'review' %}active{% endif %}" href="?step=review">Review</a>
+    </li>
+  </ul>
+
+  {% if step == "contact" %}
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="step" value="contact">
+
+      <div class="mb-3">
+        <label>Phone</label>
+        <input type="text" name="phone" class="form-control" value="{{ form_data.phone }}" pattern="\d+" title="Only numbers allowed" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Street Address</label>
+        <input type="text" name="address" class="form-control" value="{{ form_data.address }}" required>
+      </div>
+
+      <div class="mb-3">
+        <label>City</label>
+        <input type="text" name="city" class="form-control" value="{{ form_data.city }}" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Postal Code</label>
+        <input type="text" name="zipcode" class="form-control" value="{{ form_data.zipcode }}" pattern="\d+" title="Must be numeric" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Country</label>
+        <select name="country" class="form-select" required>
+          {% for country in countries %}
+            <option value="{{ country.0 }}" {% if form_data.country == country.0 %}selected{% endif %}>{{ country.1 }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label>National ID (Kennitala)</label>
+        <input type="text" name="national_id" class="form-control" value="{{ form_data.national_id }}" pattern="\d{10}" title="Must be a 10-digit number" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Next</button>
+    </form>
+
+  {% elif step == "payment" %}
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="step" value="payment">
+      <div class="mb-3">
+        <label>Payment Method</label>
+        <select name="payment_method" class="form-select" required onchange="togglePaymentFields(this.value)">
+          <option value="">Select...</option>
+          <option value="card" {% if form_data.payment_method == "card" %}selected{% endif %}>Credit Card</option>
+          <option value="transfer" {% if form_data.payment_method == "transfer" %}selected{% endif %}>Bank Transfer</option>
+          <option value="loan" {% if form_data.payment_method == "loan" %}selected{% endif %}>Mortgage</option>
+        </select>
+      </div>
+
+      <div id="card-fields" style="display: none;">
+        <div class="mb-3">
+          <label>Cardholder Name</label>
+          <input type="text" name="cardholder" class="form-control" value="{{ form_data.cardholder }}">
+        </div>
+        <div class="mb-3">
+          <label>Card Number</label>
+          <input type="text" name="card_number" class="form-control" value="{{ form_data.card_number }}" pattern="\d{12,19}" maxlength="19" title="Enter a valid card number (12–19 digits)">
+        </div>
+        <div class="mb-3">
+          <label>Expiration Date</label>
+          <input type="text" name="exp_date" class="form-control" value="{{ form_data.exp_date }}" pattern="^(0[1-9]|1[0-2])\/\d{2}$" placeholder="MM/YY" title="Format must be MM/YY">
+        </div>
+        <div class="mb-3">
+          <label>CVC</label>
+          <input type="text" name="cvv" class="form-control" value="{{ form_data.cvv }}" pattern="^\d{3}$" maxlength="3" title="3-digit CVC">
+        </div>
+      </div>
+
+      <div id="transfer-fields" style="display: none;">
+        <div class="mb-3">
+          <label>Icelandic Bank Account (e.g., 0000-00-000000)</label>
+          <input type="text" name="bank_account" class="form-control" value="{{ form_data.bank_account }}" pattern="\d{4}-\d{2}-\d{6}" title="Format: 0000-00-000000">
+        </div>
+      </div>
+
+      <div id="loan-fields" style="display: none;">
+        <div class="mb-3">
+          <label>Mortgage Provider</label>
+          <select name="loan_bank" class="form-select">
+            <option value="">Select...</option>
+            <option value="Arion" {% if form_data.loan_bank == "Arion" %}selected{% endif %}>Arion Banki</option>
+            <option value="Landsbankinn" {% if form_data.loan_bank == "Landsbankinn" %}selected{% endif %}>Landsbankinn</option>
+            <option value="Íslandsbanki" {% if form_data.loan_bank == "Íslandsbanki" %}selected{% endif %}>Íslandsbanki</option>
+          </select>
+        </div>
+      </div>
+
+      <a href="?step=contact" class="btn btn-secondary">Back</a>
+      <button type="submit" class="btn btn-primary">Next</button>
+    </form>
+
+    <script>
+      function togglePaymentFields(value) {
+        document.getElementById("card-fields").style.display = value === "card" ? "block" : "none";
+        document.getElementById("transfer-fields").style.display = value === "transfer" ? "block" : "none";
+        document.getElementById("loan-fields").style.display = value === "loan" ? "block" : "none";
+      }
+      document.addEventListener("DOMContentLoaded", function () {
+        togglePaymentFields(document.querySelector("select[name='payment_method']").value);
+        document.querySelector("select[name='payment_method']").addEventListener("change", function (e) {
+          togglePaymentFields(e.target.value);
+        });
+      });
+    </script>
+
+  {% elif step == "review" %}
+    <div class="mb-3">
+      <strong>Contact Info</strong><br>
+      Phone: {{ form_data.phone }}<br>
+      {{ form_data.address }}, {{ form_data.city }}, {{ form_data.zipcode }}<br>
+      {{ form_data.country }}<br>
+      National ID: {{ form_data.national_id }}
+    </div>
+
+    <div class="mb-3">
+      <strong>Payment Info</strong><br>
+      {% if form_data.payment_method == "card" %}
+        Cardholder: {{ form_data.cardholder }}<br>
+        Card ending in: ****{{ form_data.card_number|slice:"-4:" }}<br>
+        Exp: {{ form_data.exp_date }}
+      {% elif form_data.payment_method == "transfer" %}
+        Icelandic Bank Account: {{ form_data.bank_account }}
+      {% elif form_data.payment_method == "loan" %}
+        Provider: {{ form_data.loan_bank }}
+      {% endif %}
+    </div>
+
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="step" value="confirm">
+      <a href="?step=payment" class="btn btn-secondary">Back</a>
+      <button type="submit" class="btn btn-success">Confirm Purchase</button>
+    </form>
+
+  {% elif step == "confirm" %}
+    <div class="text-center mt-5">
+      <h2 class="text-success">🎉 Purchase Successful!</h2>
+      <p>Thank you for finalizing your purchase for <strong>{{ offer.property.address }}</strong>.</p>
+      <a href="{% url 'home' %}" class="btn btn-primary mt-3">Back to Homepage</a>
+    </div>
+  {% endif %}
+</div>
+<script src="{% static 'js/finalize.js' %}"></script>
+{% endblock %}

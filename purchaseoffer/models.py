@@ -29,7 +29,7 @@ class Offer(models.Model):
         return f"{self.property.address} {self.buyer} {self.offer}"
 
 class Finalize(models.Model):
-    offer = ForeignKey(Offer, on_delete=models.PROTECT)
+    offer = models.OneToOneField(Offer, on_delete=models.PROTECT)
     buyer_address = models.CharField(max_length=50)
     buyer_zipcode = models.CharField(max_length=20) # probably shouldn't reference zipcode table
     buyer_country = models.CharField(max_length=20)

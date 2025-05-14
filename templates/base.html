@@ -9,17 +9,34 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/forms.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/property-filter.css' %}"
 </head>
 <body>
 
     {% include "navigation.html" %}
 
     <main class="flex-grow-1">
-      {% block content %}
-      {% endblock %}
+        <div class="container mt-3">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert
+              {% if message.tags == 'error' %}alert-danger
+              {% elif message.tags == 'warning' %}alert-warning
+              {% elif message.tags == 'success' %}alert-success
+              {% else %}alert-info{% endif %}"
+                 role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        {% block content %}
+        {% endblock %}
     </main>
 
-   <footer class="shadow-sm mt-auto custom-footer">
+
+    <footer class="shadow-sm mt-auto custom-footer">
           <div class="container py-4">
             <div class="d-flex justify-content-between flex-wrap align-items-start">
 
