@@ -85,10 +85,18 @@ function toggleDropdown1() {
 function toggleDropdown2() {
   document.getElementById('TypeDropdown').classList.toggle("show");
 }
+// Handles removing the dropdown when clicking outside of it
+document.addEventListener('click', (e) =>{
+  const zipbutton = document.getElementById('ZipcodeDropdown')
+  const typebutton = document.getElementById('TypeDropdown')
 
-window.onclick = function(event) {
-  const dropdown = document.getElementById("ZipcodeDropdown");
-  if (!event.target.closest('.dropdown-button') && dropdown.classList.contains('show')) {
-    dropdown.classList.remove('show');
+  const insideZip = zipbutton.contains(e.target)
+  const insideType = typebutton.contains(e.target)
+
+  if (!insideZip){
+    zipbutton.classList.remove("show")
   }
-}
+  if(!insideType){
+    typebutton.classList.remove("show")
+  }
+});
