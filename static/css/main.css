@@ -11,7 +11,6 @@
   margin-top: 1rem; /* space below "Castle Apartments" */
 }
 
-
 /* SEARCH FIELD */
 .input-group {
   max-width: 500px;
@@ -46,7 +45,6 @@
   font-size: 1rem;
 }
 
-
 .brand-stacked {
   display: flex;
   flex-direction: column;
@@ -74,11 +72,14 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
   margin: 0;
   background: linear-gradient(to bottom, #60A6D8, #D5EEFF);
   background-repeat: no-repeat;
-  background-attachment: fixed; /* optional for smoother scrolling effect */
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 main {
@@ -113,7 +114,6 @@ main {
   max-height: 300px;
   object-fit: cover;
 }
-
 
 .spacer {
   height: 50px; /* or whatever space you need */
