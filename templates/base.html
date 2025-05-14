@@ -9,18 +9,34 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'css/forms.css' %}">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-    <link rel="stylesheet" href="{% static 'css/property-filter.css' %}"
+    <link rel="stylesheet" href="{% static 'css/property-filter.css' %}">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
     {% include "navigation.html" %}
 
     <main class="flex-grow-1">
-      {% block content %}
-      {% endblock %}
+        <div class="container mt-3">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert
+              {% if message.tags == 'error' %}alert-danger
+              {% elif message.tags == 'warning' %}alert-warning
+              {% elif message.tags == 'success' %}alert-success
+              {% else %}alert-info{% endif %}"
+                 role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        {% block content %}
+        {% endblock %}
     </main>
 
-   <footer class="shadow-sm mt-auto custom-footer">
+
+    <footer class="shadow-sm mt-auto custom-footer">
           <div class="container py-4">
             <div class="d-flex justify-content-between flex-wrap align-items-start">
 
@@ -33,7 +49,7 @@
                   <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" class="icon"></a>
                   <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="icon"></a>
                   <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="icon"></a>
-                  <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg" alt="YouTube" class="icon"></a>
+                  <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube" class="icon"></a>
                 </div>
               </div>
 

@@ -3,47 +3,49 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchButton = document.getElementById("search-icon");
 
     searchButton.addEventListener("click", async function () {
-      const formatter = new Intl.NumberFormat('de-DE')
+      const formatter = new Intl.NumberFormat('de-DE');
       const form = document.getElementById("filter-form");
       const propertiesPlaceholder = document.getElementById("property-grid");
 
-      // Get all checked checkboxes
       const checkedZips = form.querySelectorAll('input[type="checkbox"][name="zipcodes"]:checked');
       const checkedTypes = form.querySelectorAll('input[type="checkbox"][name="property_types"]:checked');
 
-      // Collect values
       const selectedZipcodes = Array.from(checkedZips).map(cb => cb.value);
       const selectedTypes = Array.from(checkedTypes).map(cb => cb.value);
 
-      // Get search input value
       const search = document.getElementById("search-value").value.trim();
+      const order_by = document.getElementById("order_by").value;
+      const min_price = document.getElementById("min-price")?.value;
+      const max_price = document.getElementById("max-price")?.value;
 
-      // Get orderby value
-      const order_by = document.getElementById("order_by").value
+      // ✅ Validate price range before fetching
+      if (min_price && max_price && parseInt(min_price) > parseInt(max_price)) {
+        propertiesPlaceholder.innerHTML = `
+          <div class="col-12 text-center mt-4">
+            <div class="alert alert-danger" role="alert">
+              Minimum price cannot be greater than maximum price.
+            </div>
+          </div>
+        `;
+        return; // ⛔ Stop fetch if validation fails
+      }
 
-      // Encode parameters safely
       const zipParam = encodeURIComponent(selectedZipcodes.join(","));
       const typeParam = encodeURIComponent(selectedTypes.join(","));
       const searchParam = encodeURIComponent(search);
-      const orderParam = encodeURIComponent(order_by)
+      const orderParam = encodeURIComponent(order_by);
+      const minPriceParam = encodeURIComponent(min_price);
+      const maxPriceParam = encodeURIComponent(max_price);
 
+      const query = `?zip_filter=${zipParam}&type_filter=${typeParam}&address_name=${searchParam}&order_by=${orderParam}&min_price=${minPriceParam}&max_price=${maxPriceParam}`;
 
-      // Build query string
-      const query = `?zip_filter=${zipParam}&type_filter=${typeParam}&address_name=${searchParam}&order_by=${orderParam}`;
-
-      console.log(query)
-
-      // Fetch data (example URL — change if needed)
       try {
-
         const response = await fetch(`${query}`);
-        console.log(response)
         if (response.ok) {
           const json = await response.json();
           const properties = json.data;
 
           let html = "";
-
           if (properties.length > 0) {
             html = properties.map((property) => `
               <div class="col-md-4 mb-4">
@@ -70,33 +72,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
           propertiesPlaceholder.innerHTML = html;
         } else {
-          propertiesPlaceholder.innerHTML = "<p class='text-danger'>Failed to load properties.</p>";
+          const errorData = await response.json();
+          propertiesPlaceholder.innerHTML = `
+            <div class="col-12 text-center mt-4">
+              <div class="alert alert-danger" role="alert">
+                ${errorData.error || "Failed to load properties."}
+              </div>
+            </div>
+          `;
         }
       } catch (error) {
         console.error("Error fetching properties:", error);
       }
     });
   }
+
   registerSearchButtonHandler();
 });
+
 function toggleDropdown1() {
   document.getElementById('ZipcodeDropdown').classList.toggle("show");
 }
+
 function toggleDropdown2() {
   document.getElementById('TypeDropdown').classList.toggle("show");
 }
-// Handles removing the dropdown when clicking outside of it
-document.addEventListener('click', (e) =>{
-  const zipbutton = document.getElementById('ZipcodeDropdown')
-  const typebutton = document.getElementById('TypeDropdown')
 
-  const insideZip = zipbutton.contains(e.target)
-  const insideType = typebutton.contains(e.target)
-
-  if (!insideZip){
-    zipbutton.classList.remove("show")
-  }
-  if(!insideType){
-    typebutton.classList.remove("show")
-  }
+document.addEventListener('click', (e) => {
+  const zipbutton = document.getElementById('ZipcodeDropdown');
+  const typebutton = document.getElementById('TypeDropdown');
+  if (!zipbutton.contains(e.target)) zipbutton.classList.remove("show");
+  if (!typebutton.contains(e.target)) typebutton.classList.remove("show");
 });

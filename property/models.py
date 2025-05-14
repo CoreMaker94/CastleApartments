@@ -24,6 +24,7 @@ class Property(models.Model):
     description = models.TextField()
     price = models.IntegerField()
     list_date = models.DateField()
+    is_sold = models.BooleanField(default=False, null=False)
 
     def main_image(self):
         return self.images.filter(is_main=True).first() or self.images.first()

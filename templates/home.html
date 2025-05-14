@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+from django.conf import settings
 
 {% block content %}
 <div class="container mt-3">
@@ -11,7 +12,7 @@
           {% if featured.main_image %}
             <img src="{{  featured.main_image.image.url }}" class="img-fluid featured-image rounded-top" alt="Featured Property">
           {% else %}
-            <img src="{% static 'images/no-image.png' %}" class="img-fluid featured-image rounded-top" alt="Default Featured Image">
+            <img src="{% static 'images/no_image.png' %}" class="img-fluid featured-image rounded-top" alt="Default Featured Image">
           {% endif %}
           <div class="card-body">
             <h4 class="card-title">{{ featured.address }}</h4>
