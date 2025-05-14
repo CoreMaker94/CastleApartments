@@ -47,6 +47,23 @@ def property_list(request):
                 properties = properties.order_by('address')
             elif order_by == 'n-desc':
                 properties = properties.order_by('-address')
+        min_price = request.GET.get('min_price')
+        max_price = request.GET.get('max_price')
+
+        # Validate if both are provided and min > max
+        if min_price and max_price:
+            try:
+                if int(min_price) > int(max_price):
+                    return JsonResponse({
+                        "error": "Minimum price cannot be greater than maximum price."
+                    }, status=400)
+            except ValueError:
+                pass  # Ignore if values are not valid integers
+
+        if min_price:
+            properties = properties.filter(price__gte=min_price)
+        if max_price:
+            properties = properties.filter(price__lte=max_price)
 
         return JsonResponse({
             'data': [

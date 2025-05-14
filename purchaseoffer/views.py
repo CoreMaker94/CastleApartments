@@ -37,13 +37,23 @@ def make_offer(request, id):
             messages.error(request, "There was an issue with your offer.")
             return render(request, "property/single_property.html", {"form": form, "property": prop})
 
-        # Verify that there is not another pending/accepted/contingent offer
+        # Prevent any new offers if property already has an accepted or contingent offer
+        active_offer_exists = Offer.objects.filter(
+            property=prop,
+            status__name__in=["Accepted", "Contingent"]
+        ).exists()
+
+        if active_offer_exists:
+            form = PurchaseOfferForm()
+            messages.error(request, "This property already has an active offer and is no longer accepting new offers.")
+            return render(request, "property/single_property.html", {"form": form, "property": prop})
+
+        # Prevent duplicate offers by the same buyer (unless rejected)
         existing_offer = Offer.objects.filter(property=prop, buyer=buyer).first()
-        if existing_offer:
-            if existing_offer.status.name != "Rejected": # TODO if we add expired have an OR clause
-                form.add_error(None, f"You already have purchase offer that is {existing_offer.status.name}")
-                messages.error(request, "There was an issue with your offer.")
-                return render(request, "property/single_property.html", {"form": form, "property": prop})
+        if existing_offer and existing_offer.status.name != "Rejected":
+            form.add_error(None, f"You already have a purchase offer that is {existing_offer.status.name}.")
+            messages.error(request, "There was an issue with your offer.")
+            return render(request, "property/single_property.html", {"form": form, "property": prop})
 
         # Check that expiration date is in the future
         if form.is_valid():
@@ -136,7 +146,7 @@ def change_status_seller(request, id):
         messages.warning(request, "Offer has expired and cannot be changed.")
         return redirect("get-offers")
 
-    # Get new status from POST (e.g., "Accepted" or "Rejected")
+    # Get new status from POST
     new_status_name = request.POST.get("status")
     if new_status_name not in ["Accepted", "Rejected", "Contingent"]:
         messages.error(request, "Invalid status.")
@@ -146,6 +156,18 @@ def change_status_seller(request, id):
     new_status = Status.objects.get(name=new_status_name)
     offer.status = new_status
     offer.save()
+
+    # Reject other offers if accepted or contingent
+    if new_status_name in ["Accepted", "Contingent"]:
+        rejected_status = Status.objects.get(name="Rejected")
+        Offer.objects.filter(property=offer.property)\
+            .exclude(id=offer.id)\
+            .exclude(status__name="Rejected")\
+            .update(status=rejected_status)
+
+        # Optionally mark property as sold
+        offer.property.is_sold = True
+        offer.property.save()
 
     messages.success(request, f"Offer has been {new_status_name.lower()}.")
     return redirect("get-offers")
