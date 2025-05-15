@@ -40,7 +40,7 @@ def make_offer(request, id):
         # Prevent any new offers if property already has an accepted or contingent offer
         active_offer_exists = Offer.objects.filter(
             property=prop,
-            status__name__in=["Accepted", "Contingent"]
+            status__name__in=["Accepted", "Contingent", "Pending"]
         ).exists()
 
         if active_offer_exists:
