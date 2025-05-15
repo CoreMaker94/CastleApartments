@@ -47,9 +47,9 @@ def property_list(request):
         order_by = request.GET.get('order_by')
         if order_by:
             if order_by == 'p-asc':
-                properties = properties.order_by('-price')
-            elif order_by == 'p-desc':
                 properties = properties.order_by('price')
+            elif order_by == 'p-desc':
+                properties = properties.order_by('-price')
             elif order_by == 'n-asc':
                 properties = properties.order_by('address')
             elif order_by == 'n-desc':
