@@ -1,6 +1,7 @@
 from collections import defaultdict
 from datetime import date
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -139,6 +140,10 @@ def property_by_id(request, id):
 
 @login_required
 def create_property(request):
+    if not settings.DEBUG:
+        messages.error(request, "The creation of properties is not enabled. Turn on debug mode to enable it.")
+        return redirect("home")
+
     type_buyer = ProfileType.objects.get(name="Buyer")
     profile = Profile.objects.get(user=request.user)
 
@@ -153,6 +158,7 @@ def create_property(request):
         if property_form.is_valid() and images_form.is_valid():
             # Validate prop form and then save
             # Check if rooms >= beds
+            # Check price is not negative
             new_property = property_form.save(commit=False)
             new_property.seller = request.user
             new_property.list_date = date.today()
@@ -161,8 +167,8 @@ def create_property(request):
 
             PropertyImage.objects.create(
                 property=new_property,
-                image=images_form.cleaned_data['image'],
-                is_main=True
+                image=images_form.cleaned_data.get('main_image'),
+                is_main=False
             )
 
             other_images = request.FILES.getlist("other_images")
