@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-from django.conf import settings
+{% load custom_filters %}
 
 {% block content %}
 <div class="container mt-3">
@@ -17,7 +17,7 @@ from django.conf import settings
           <div class="card-body">
             <h4 class="card-title">{{ featured.address }}</h4>
             <p class="card-text">{{ featured.beds }} 🛏️ • {{ featured.bath }} 🛁 • {{ featured.size }} 📐</p>
-            <p class="card-text"><strong>${{ featured.price }}</strong></p>
+            <p class="card-text"><strong>{{ featured.price|dot_separator }}ISK</strong></p>
             <a href="{% url 'property_by_id' featured.id %}" class="btn btn-primary btn-sm">View Details</a>
           </div>
         </div>
@@ -39,7 +39,7 @@ from django.conf import settings
           <div class="card-body">
             <h5 class="card-title">{{ property.address }}</h5>
             <p class="card-text">{{ property.beds }} 🛏️ • {{ property.bath }} 🛁 • {{ property.size }}  📐</p>
-            <p class="card-text"><strong>${{ property.price }}</strong></p>
+            <p class="card-text"><strong>{{ property.price|dot_separator }}ISK</strong></p>
             <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary btn-sm">View Details</a>
           </div>
         </div>
