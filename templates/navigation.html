@@ -17,6 +17,11 @@
           <a class="nav-link" href="{% url 'property_list' %}">Property Catalogue</a>
         </li>
           {% if user.is_authenticated %}
+            {% if user.profile.type.name != "Buyer" %}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'my-properties' %}">Your properties</a>
+              </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'get-offers' %}">Your offers</a>
             </li>
