@@ -4,21 +4,8 @@
 {% block content %}
  <div class="container mt-4">
 
-  {% if messages %}
-    <div class="mt-3">
-      
-      {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      {% endfor %}
-      
-    </div>
-  {% endif %}
-
     {% if profile.type_id != 1 %}
-        {% include 'user/_banner.html' with profile=profile%}
+        {% include 'user/_banner.html' with profile=profile %}
     {% endif %}
 
   <!-- Profile Header with Name -->
@@ -43,40 +30,41 @@
       {% endif %}
 
       <!-- Hidden Profile Form -->
-      {% if request.user == profile.user %}{# Don't want to render this when others are checking the page #}
+      {% if request.user == profile.user %}
         <form id="edit-profile-form" style="display: none" method="post" enctype="multipart/form-data" action="{% url 'profile' %}">
           {% csrf_token %}
           {{ form }}
           <input type="submit" class="btn btn-primary mt-3" value="Update"/>
         </form>
 
-      <button id="toggle-edit-profile-button" onclick="displayEditProfileButtonForm()" class="btn btn-secondary mt-3">
-        Edit Profile
-      </button>
+        <button id="toggle-edit-profile-button" onclick="displayEditProfileButtonForm()" class="btn btn-secondary mt-3">
+          Edit Profile
+        </button>
       {% endif %}
-        {% if properties %}
-          <div class="mt-5">
-            <h4>Properties Listed by {{ profile.name }}</h4>
-            <div class="row">
-              {% for property in properties %}
-                <div class="col-md-4 mb-4">
-                  <div class="card h-100 shadow-sm">
-                    {% if property.images.first %}
-                      <img src="{{ property.images.first.image.url }}" class="card-img-top" alt="Property Image">
-                    {% else %}
-                      <img src="{% static 'images/no-image.png' %}" class="card-img-top" alt="No Image">
-                    {% endif %}
-                    <div class="card-body">
-                      <h5 class="card-title">{{ property.address }}</h5>
-<p class="card-text"><strong> ${{ property.price }} </strong></p>
-                      <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary btn-sm">View</a>
-                    </div>
+
+      {% if properties %}
+        <div class="mt-5">
+          <h4>Properties Listed by {{ profile.name }}</h4>
+          <div class="row">
+            {% for property in properties %}
+              <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                  {% if property.images.first %}
+                    <img src="{{ property.images.first.image.url }}" class="card-img-top" alt="Property Image">
+                  {% else %}
+                    <img src="{% static 'images/no-image.png' %}" class="card-img-top" alt="No Image">
+                  {% endif %}
+                  <div class="card-body">
+                    <h5 class="card-title">{{ property.address }}</h5>
+                    <p class="card-text"><strong> ${{ property.price }} </strong></p>
+                    <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary btn-sm">View</a>
                   </div>
                 </div>
-              {% endfor %}
-            </div>
+              </div>
+            {% endfor %}
           </div>
-        {% endif %}
+        </div>
+      {% endif %}
 
     </div>
   </div>

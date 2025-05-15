@@ -33,18 +33,20 @@
       <p><strong>Size:</strong> {{ property.size }} m²</p>
 
       <!-- Seller Info -->
-      <div class="seller-info mt-4 d-flex align-items-center">
-        {% if property.seller.profile_image %}
-          <img src="{{ property.seller.profile_image.url }}" class="rounded-circle me-3 seller-img" alt="Seller Image">
-        {% endif %}
+      <div class="seller-info mt-4 d-flex justify-content-between align-items-center">
           <div>
               <p><strong>Seller:</strong> {{ property.seller.profile.name }}</p>
               <a href="{% url 'profile-by-id' property.seller.id %}" class="btn btn-outline-primary btn-sm">View
                   Seller Info</a>
           </div>
-      </div>
+            {% if property.seller.profile.image %}
+            <img src="{{ property.seller.profile.image.url }}" class="rounded-circle seller-img" alt="Seller Image"
+                 width="60" height="60">
+            {% endif %}
+      </div> <br>
 
-      {% if user.is_authenticated %}
+
+        {% if user.is_authenticated %}
         {% if not property.is_sold %}
           <form action="{% url 'make-offer' property.id %}" method="post">
             {% csrf_token %}
