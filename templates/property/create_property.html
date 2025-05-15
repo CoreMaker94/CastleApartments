@@ -1,15 +1,54 @@
 {% extends 'base.html' %}
+
 {% block content %}
-    <div class="container center">
-        <h2>Create a new property</h2>
+<div class="container mt-5 mb-5">
+
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">Create a New Property</h2>
+        <p class="text-muted">Fill in the details below to list your property</p>
+    </div>
+
+    <div class="card shadow-sm p-4">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="mb-3">
-              <label for="formFile" class="form-label"></label>
-                {{ property_form }}
-                {{ images_form }}
+
+            <!-- Property Form Fields -->
+            <div class="mb-4">
+                {{ property_form.non_field_errors }}
+                {% for field in property_form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div class="text-danger">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
             </div>
-            <button type="submit" class="btn btn-outline-primary ">Submit</button>
+
+            <!-- Image Uploads -->
+            <div class="mb-4">
+                <h5>Upload Images</h5>
+                {{ images_form.non_field_errors }}
+                {% for field in images_form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Submit Property</button>
+            </div>
         </form>
     </div>
+
+</div>
 {% endblock %}
