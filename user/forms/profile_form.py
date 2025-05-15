@@ -42,10 +42,8 @@ class CustomUserCreationForm(UserCreationForm):
 class BuyerProfileForm(ModelForm):
     class Meta:
         model = Profile
-        exclude = ['user', 'id', 'type', 'banner', 'logo', 'phone', 'zipcode', 'bio']
-        widgets = {} # used for setting class for the input/selection field
-
-
+        exclude = ['user', 'id', 'type', 'banner', 'logo', 'phone', 'zipcode','bio']
+        widgets = {}
 class SellerProfileForm(ModelForm):
     class Meta:
         model = Profile

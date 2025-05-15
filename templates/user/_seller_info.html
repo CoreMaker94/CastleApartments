@@ -10,6 +10,9 @@
             <li><strong>City: </strong>{{ profile.zipcode.city.name }}</li>
             <li><strong>Zip: </strong>{{ profile.zipcode.code }}</li>
         {% endif %}
-        <li><strong>Biography: </strong>{{ profile.bio }}</li>
+        {% if profile.bio %}
+          <p><strong>Biography:</strong> {{ profile.bio }}</p>
+        {% endif %}
+
     </ul>
 </div>
