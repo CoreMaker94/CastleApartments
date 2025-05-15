@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 <div class="card property-card position-relative {% if property.is_sold %}sold{% endif %}">
 
     {% if property.is_sold %}
@@ -16,7 +17,7 @@
     <div class="card-body">
         <h5 class="card-title">{{ property.address }}</h5>
         <p class="card-text">{{ property.beds }} 🛏️ • {{ property.bath }} 🛁 • {{ property.size }} 📐</p>
-        <p class="card-text"><strong>${{ property.price }}</strong></p>
+        <p class="card-text"><strong>{{ property.price|dot_separator }} ISK</strong></p>
         <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary btn-sm">View Details</a>
     </div>
 </div>
