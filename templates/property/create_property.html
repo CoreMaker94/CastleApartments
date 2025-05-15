@@ -1,11 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
     <div class="container center">
+        <h2>Create a new property</h2>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-3">
-              <label for="formFile" class="form-label">Upload Files Here</label>
+              <label for="formFile" class="form-label"></label>
                 {{ property_form }}
                 {{ images_form }}
             </div>
             <button type="submit" class="btn btn-outline-primary ">Submit</button>
         </form>
     </div>
+{% endblock %}

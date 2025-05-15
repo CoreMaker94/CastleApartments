@@ -193,3 +193,16 @@ def create_property(request):
             'property_form': property_form,
             'images_form': images_form,
         })
+
+@login_required
+def my_properties(request):
+    buyer_type = ProfileType.objects.get(name="Buyer")
+    profile = Profile.objects.get(user=request.user)
+    if profile.type == buyer_type:
+        messages.error(request, "You are not allowed to create properties")
+        return redirect('home')
+    properties = Property.objects.filter(seller=request.user)
+
+    return render(request, "property/my_properties.html", {
+        "properties": properties,
+    })

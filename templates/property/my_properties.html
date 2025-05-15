@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    <div class="centered">
+    <a href="" class="btn btn-primary">Create new property</a>
+  {% if properties %}
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; justify-content: flex-start; padding: 1rem; padding-left: 5rem" >
+      {% for property in properties %}
+        <div style="border: 1px solid #ccc; border-radius: 8px; padding: 16px; width: 300px; background-color: #f9f9f9;">
+          <h3>{{ property.title }}</h3>
+          {% if property.main_image %}
+            <img src="{{ property.main_image.image.url }}" alt="{{ property.title }}" style="width: 100%; height: auto; border-radius: 4px; margin-bottom: 12px;">
+          {% endif %}
+          <p>{{ property.description|truncatewords:20 }}</p>
+          <div style="display: flex; justify-content: space-between; margin-top: 12px;">
+            <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary">View</a>
+            <a href="{% url 'home'  %}" class="btn btn-secondary">Edit</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>You haven’t listed any properties yet.</p>
+  {% endif %}
+    </div>
+{% endblock %}
