@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import OuterRef, Subquery
 from django.db.models.functions import Coalesce
@@ -98,8 +99,9 @@ def get_profile_by_id(request, id):
             Subquery(main_image_subquery),
             Subquery(fallback_image_subquery)
         )
-    ).values('id', 'address', 'main_image')
+    ).values('id', 'address', 'main_image', 'price')
     return render(request, 'user/profile.html', {
         'profile': profile,
-        'properties': properties
+        'properties': properties,
+        'MEDIA_URL': settings.MEDIA_URL,
     })

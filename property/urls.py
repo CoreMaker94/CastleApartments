@@ -9,4 +9,5 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('property/<int:id>/', views.property_by_id, name='property_by_id'),
     path('property/<int:id>/purchaseoffer/',offer_views.make_offer, name="make-offer"),
+    path('property/create/', views.create_property, name='create-property'),
 ]
