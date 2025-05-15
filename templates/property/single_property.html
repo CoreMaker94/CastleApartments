@@ -70,7 +70,7 @@
       </div> <br>
 
 
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and user.is_seller %}
         {% if not property.is_sold %}
         {% if offer %}
         <div class="alert alert-info mt-2">

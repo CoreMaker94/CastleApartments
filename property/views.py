@@ -206,3 +206,23 @@ def my_properties(request):
     return render(request, "property/my_properties.html", {
         "properties": properties,
     })
+@login_required
+def edit_property(request, id):
+
+    property = Property.objects.get(id=id)
+
+    if request.method == "POST":
+        property_form = CreatePropertyForm(request.POST, instance=property)
+        if property_form.is_valid():
+            property_form.save()
+            messages.success(request, "Property updated successfully.")
+            return redirect("property_by_id", id=property.id)
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        property_form = CreatePropertyForm(instance=property)
+
+    return render(request, "property/edit_property.html", {
+        "property_form": property_form,
+        "property": property,
+    })
