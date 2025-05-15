@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
  <div class="container mt-4">
@@ -62,14 +63,14 @@
               {% for property in properties %}
                 <div class="col-md-4 mb-4">
                   <div class="card h-100 shadow-sm">
-                    {% if property.images.first %}
-                      <img src="{{ property.images.first.image.url }}" class="card-img-top" alt="Property Image">
+                    {% if property.main_image %}
+                      <img src="{{ MEDIA_URL }}{{ property.main_image }}" class="card-img-top" alt="Property Image">
                     {% else %}
                       <img src="{% static 'images/no_image.png' %}" class="card-img-top" alt="No Image">
                     {% endif %}
                     <div class="card-body">
                       <h5 class="card-title">{{ property.address }}</h5>
-                        <p class="card-text"><strong> ${{ property.price }} </strong></p>
+                        <p class="card-text"><strong> {{ property.price | dot_separator }} kr. </strong></p>
                       <a href="{% url 'property_by_id' property.id %}" class="btn btn-primary btn-sm">View</a>
                     </div>
                   </div>
