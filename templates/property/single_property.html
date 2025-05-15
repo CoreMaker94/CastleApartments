@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
+
 <div class="container mt-5 mb-5">
 
   <div class="row">
@@ -26,7 +28,7 @@
       </h2>
       <p><strong>Type:</strong> {{ property.type.name }}</p>
       <p><strong>Location:</strong> {{ property.zipcode }}</p>
-      <p><strong>Price:</strong> {{ property.price }} ISK</p>
+      <p><strong>Price:</strong> {{ property.price|dot_separator }} ISK</p> <!--new-->
       <p><strong>Listing Date:</strong> {{ property.list_date }}</p>
       <p><strong>Bedrooms:</strong> {{ property.beds }}</p>
       <p><strong>Bathrooms:</strong> {{ property.bath }}</p>
