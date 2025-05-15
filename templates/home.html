@@ -34,7 +34,7 @@ from django.conf import settings
           {% if property.images.first %}
             <img src="{{ property.images.first.image.url }}" class="card-img-top" alt="Property Image">
           {% else %}
-            <img src="{% static 'images/no-image.png' %}" class="card-img-top" alt="Default Image">
+            <img src="{% static 'images/no_image.png' %}" class="card-img-top" alt="Default Image">
           {% endif %}
           <div class="card-body">
             <h5 class="card-title">{{ property.address }}</h5>
