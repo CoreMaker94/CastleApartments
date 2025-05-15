@@ -7,16 +7,33 @@
 <div class="container mt-5 mb-5">
 
   <div class="row">
-    <!-- Property Image -->
-    <div class="col-md-6">
-    {% with property.main_image as main_img %}
-      {% if main_img %}
-        <img src="{{ main_img.image.url }}" class="img-fluid rounded" alt="Property Image">
+      <!-- Property Image -->#}
+      <div class="col-md-6">
+      {% if property.images.all %}
+        <div id="propertyCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            {% for img in property.images.all %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="{{ img.image.url }}" class="d-block w-100 rounded" alt="Property Image">
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- Controls -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#propertyCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#propertyCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
       {% else %}
         <img src="{% static 'images/featured_apartment.jpg' %}" class="img-fluid rounded" alt="No Image Available">
       {% endif %}
-    {% endwith %}
-    </div>
+      </div>
+
 
     <!-- Property Details -->
     <div class="col-md-6">
@@ -71,11 +88,14 @@
   <!-- Other Properties -->
   <div class="mt-5">
     <h4>Other Properties for Sale</h4>
-      {% for p in other_properties %}
-          {% include "property/_available_properties.html" with property=p %}
-      {% endfor %}
-        </div>
-    </div>
+      <div class="row">
+        {% for p in other_properties %}
+          <div class="col-md-4 mb-4">
+            {% include "property/_available_properties.html" with property=p %}
+          </div>
+        {% endfor %}
+      </div>
   </div>
+</div>
 
 {% endblock %}
