@@ -4,7 +4,7 @@ from datetime import date
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, aget_object_or_404, get_object_or_404
 from django.contrib import messages
 
 from property.forms.property_form import CreatePropertyForm, PropertyImageForm
@@ -128,7 +128,7 @@ def property_by_id(request, id):
     offer = None
     if request.user.is_authenticated:
         offer = Offer.objects.filter(property_id=id, buyer_id = request.user.id).first()
-    property = Property.objects.get(id=id)
+    property = get_object_or_404(Property, id=id)
     other_properties = Property.objects.exclude(id=id)[:6]
     form = PurchaseOfferForm(instance=offer)
     return render(request, "property/single_property.html", {

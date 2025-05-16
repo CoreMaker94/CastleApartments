@@ -70,30 +70,30 @@
       </div> <br>
 
 
-        {% if user.is_authenticated and user.is_seller %}
-        {% if not property.is_sold %}
-        {% if offer %}
-        <div class="alert alert-info mt-2">
-            You have already made an offer for this property.
-            <strong>Status:</strong> {{ offer.status.name }}
-        </div>
-        <form action="{% url 'make-offer' property.id %}" method="post">
-            {% csrf_token %}
-            {{ form }}
-            <button class="btn btn-warning mt-2">Resubmit Offer</button>
-        </form>
-        {% else %}
-        <form action="{% url 'make-offer' property.id %}" method="post">
-            {% csrf_token %}
-            {{ form }}
-            <button class="btn btn-primary mt-2">Submit a Purchase Offer</button>
-        </form>
-        {% endif %}
-        {% else %}
-        <div class="alert alert-warning mt-3">
-            This property has been sold. New offers are no longer accepted.
-        </div>
-        {% endif %}
+        {% if user.is_authenticated and user.profile.type.name == "Buyer" %}
+            {% if not property.is_sold %}
+                {% if offer %}
+                <div class="alert alert-info mt-2">
+                    You have already made an offer for this property.
+                    <strong>Status:</strong> {{ offer.status.name }}
+                </div>
+                <form action="{% url 'make-offer' property.id %}" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <button class="btn btn-warning mt-2">Resubmit Offer</button>
+                </form>
+                {% else %}
+                <form action="{% url 'make-offer' property.id %}" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <button class="btn btn-primary mt-2">Submit a Purchase Offer</button>
+                </form>
+                {% endif %}
+            {% else %}
+            <div class="alert alert-warning mt-3">
+                This property has been sold. New offers are no longer accepted.
+            </div>
+            {% endif %}
         {% endif %}
     </div>
   </div>

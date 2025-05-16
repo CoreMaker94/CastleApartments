@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
                   <div class="card-body">
                     <h5 class="card-title">${property.address}</h5>
                     <p class="card-text">${property.beds} 🛏️ • ${property.bath} 🛁 • ${property.size} 📐</p>
-                    <p class="card-text"><strong>${formatter.format(property.price)} kr.</strong></p>
+                    <p class="card-text"><strong> ${formatter.format(property.price)} ISK.</strong></p>
                     <a href="/property/${property.id}" class="btn btn-primary btn-sm">View Details</a>
                   </div>
                 </div>
