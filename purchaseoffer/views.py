@@ -45,13 +45,13 @@ def make_offer(request, id):
 
         if active_offer_exists:
             form = PurchaseOfferForm()
-            messages.error(request, "This property already has an active offer and is no longer accepting new offers.")
+            messages.error(request, "You have already made an offer on this property.")
             return render(request, "property/single_property.html", {"form": form, "property": prop})
 
         # Prevent duplicate offers by the same buyer (unless rejected)
         existing_offer = Offer.objects.filter(property=prop, buyer=buyer).first()
         if existing_offer and existing_offer.status.name != "Rejected":
-            form.add_error(None, f"You already have a purchase offer that is {existing_offer.status.name}.")
+            form.add_error(None, f"You have a purchase offer that is {existing_offer.status.name}.")
             messages.error(request, "There was an issue with your offer.")
             return render(request, "property/single_property.html", {"form": form, "property": prop})
 

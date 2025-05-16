@@ -127,7 +127,7 @@ def home(request):
 def property_by_id(request, id):
     offer = None
     if request.user.is_authenticated:
-        offer = Offer.objects.filter(property_id=id, buyer_id = request.user.id).first()
+        offer = Offer.objects.filter(property_id=id, buyer_id = request.user.id).last()
     property = get_object_or_404(Property, id=id)
     other_properties = Property.objects.exclude(id=id)[:6]
     form = PurchaseOfferForm(instance=offer)
